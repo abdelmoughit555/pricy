@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
-
+// At the top of you webpack.mix.js file
+const domain = 'pricy.test'; // <= EDIT THIS
+const homedir = require('os').homedir()
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -13,5 +15,12 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+        require("tailwindcss"),
+    ]).browserSync({
+        proxy: 'https://' + domain,
+        host: domain,
+        open: 'external',
+        https: {
+            key: homedir + '/.config/valet/Certificates/' + domain + '.key', cert: homedir + '/.config/valet/Certificates/' + domain + '.crt',
+        },
+    });

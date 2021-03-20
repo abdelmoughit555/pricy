@@ -1,9 +1,9 @@
 <!-- resources/views/child.blade.php -->
 
-@extends('layouts.app')
+@extends('shopify-app::layouts.default')
 
 @section('title', 'Page Title')
 
 @section('content')
-
+    @livewire('experiments.split-test.steps')
 @endsection

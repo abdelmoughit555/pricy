@@ -17,8 +17,10 @@ class CreateSplitTestsTable extends Migration
             $table->id();
             $table->string('uuid');
             $table->longText('title');
+            $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('shop_id')->references('id')->on('users');
 
             $table->timestamps();
         });

@@ -10,16 +10,24 @@ class SplitCycle extends Model
 {
     use HasFactory;
 
+    const PENDING = "pending";
+    const RUNNING = "running";
+    const FINISHED = "finshed";
+
     protected $fillable = [
         'uuid',
-        'cycle_date',
+        'start_at',
+        'end_at',
         'split_test_id',
         'variant_id',
-        'price',
+        'old_price',
+        'new_price',
+        'status'
     ];
 
     protected $cast = [
-        'cycle_date' => 'date'
+        'start_at' => 'date',
+        'end_at' => 'date'
     ];
 
     public static function boot()
@@ -34,5 +42,17 @@ class SplitCycle extends Model
     public function splitTest()
     {
         return $this->belongsTo(SplitTest::class);
+    }
+
+    public function createNewCycle($varinatCycle)
+    {
+        return $this->create([
+            'start_at' => '2020-12-02', // varinatCycle["start_at"],
+            'end_at' => '2020-12-02', // varinatCycle["end_at"],
+            'variant_id' => $varinatCycle['variant_id'],
+            'new_price' => $varinatCycle['new_price'],
+            'old_price' => $varinatCycle['old_price'],
+            'status' => SplitCycle::PENDING
+        ]);
     }
 }

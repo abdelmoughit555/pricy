@@ -12,20 +12,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class StartSplitTest implements ShouldQueue
+class StartSplitTestJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $user;
     public $splitCycle;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(User $user, SplitCycle $splitCycle)
+    public function __construct(SplitCycle $splitCycle)
     {
-        $this->user  = $user;
         $this->splitCycle = $splitCycle;
     }
 
@@ -36,15 +34,20 @@ class StartSplitTest implements ShouldQueue
      */
     public function handle()
     {
-        $this->user->api()->rest(
+        $showOwner = $this->splitCycle->splitTest->shopOwner;
+        $showOwner->api()->rest(
             'PUT',
             "/admin/api/variants/{$this->splitCycle->variant_id}.json",
             ['query' => [
                 'variant' => [
                     'id' => $this->splitCycle->variant_id,
-                    'price' => $this->splitCycle->price
+                    'price' => $this->splitCycle->new_price
                 ]
             ]]
         );
+
+        $this->splitCycle->update([
+            'status' => SplitCycle::RUNNING
+        ]);
     }
 }

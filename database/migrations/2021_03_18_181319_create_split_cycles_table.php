@@ -16,9 +16,12 @@ class CreateSplitCyclesTable extends Migration
         Schema::create('split_cycles', function (Blueprint $table) {
             $table->id();
             $table->string('uuid');
-            $table->date('cycle_date');
+            $table->date('start_at');
+            $table->date('end_at');
             $table->string('variant_id');
-            $table->string('price');
+            $table->string('old_price');
+            $table->string('new_price');
+            $table->string('status');
             $table->unsignedBigInteger('split_test_id');
             $table->foreign('split_test_id')->references('id')->on('split_tests');
             $table->timestamps();

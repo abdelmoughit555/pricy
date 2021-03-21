@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Experiments\SplitTest;
 
 use App\Jobs\SplitTest\StartSplitTest;
 use App\Models\Product;
+use App\Models\SplitCycle;
+use App\Models\SplitTest;
 use Livewire\Component;
 
 class SecondStep extends Component
@@ -52,7 +54,7 @@ class SecondStep extends Component
     public function addNewTest()
     {
         array_push($this->tests, [
-            'date' => [],
+            'start_at' => '',
             'variants' => $this->variantsProduct()
         ]);
     }
@@ -79,27 +81,39 @@ class SecondStep extends Component
             ->where('shopify_product_id', '6549307195599')
             ->first();
 
+
         $splitTest = $product->splitTests()->create([
+            'shop_id' => $product->shop_id,
             'title' => $product->title
         ]);
 
         foreach ($this->tests as $test) {
             foreach ($test['variants'] as $variant) {
                 $splitTest->splitCycles()->create([
+                    'start_at' => '2021-03-20', // test["date"],
+                    'end_at' => '2021-03-21', // test["date"],
+                    'variant_id' => $variant['variant_id'],
+                    'new_price' => $variant['new_price'],
+                    'old_price' => $variant['old_price'],
+                    'status' => SplitCycle::PENDING
+                ]);
+
+                /*                 $splitTest->splitCycles()->create([
                     'start_at' => '2020-12-02', // test["date"],
                     'end_at' => '2020-12-02', // test["date"],
                     'variant_id' => $variant['variant_id'],
                     'new_price' => $variant['price'],
                     'old_price' => $variant['price'],
-                ]);
+                    'status' => SplitCycle::PENDING
+                ]); */
             }
         }
 
-
+        /*
         $splitTest = $splitTest->fresh();
         foreach ($splitTest->splitCycles as $splitCycle) {
             StartSplitTest::dispatch(auth()->user(), $splitCycle);
-        }
+        } */
     }
 
     public function render()

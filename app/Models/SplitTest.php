@@ -13,7 +13,8 @@ class SplitTest extends Model
     protected $fillable = [
         'uuid',
         'title',
-        'product_id'
+        'product_id',
+        'shop_id',
     ];
 
     public static function boot()
@@ -28,6 +29,11 @@ class SplitTest extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function shopOwner()
+    {
+        return $this->belongsTo(User::class, 'shop_id');
     }
 
     public function splitCycles()

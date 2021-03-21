@@ -29,10 +29,10 @@
                                     <div>
                                         <p class="text-sm font-medium text-pricy-gray-200">Current price</p>
                                     </div>
-                                    <div x-data x-init="new Pikaday({ field: $refs.date })" class="relative">
+                                    <div x-data x-init="new Pikaday({ field: $refs.startAt })" class="relative">
                                         <input name=""
                                             class="w-full h-10 px-2 text-sm font-medium text-gray-700 border rounded outline-none appearance-none "
-                                            x-ref="date" id="" wire:model.lazy="tests.{{ $testKey }}.date">
+                                            x-ref="startAt" id="" wire:model.lazy="tests.{{ $testKey }}.start_at">
 
                                         <div class="absolute top-4 right-4">
                                             <svg width="8" height="6" viewBox="0 0 8 6" fill="none"

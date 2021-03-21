@@ -23,7 +23,7 @@
                     </div>
                     <div class="flex-1 mt-4 overflow-scroll bg-white rounded">
                         @foreach ($products as $product)
-                            <div wire:click="$emitUp('incrementStep', {{ $product->id }})"
+                            <div wire:click="$emitUp('incrementStep', {{ $product->shopify_product_id }})"
                                 class="transition-colors duration-200 cursor-pointer hover:bg-gray-100">
                                 <div class="flex items-center w-full px-6 py-2 space-x-2 ">
                                     <div class="w-12 h-16">
@@ -31,14 +31,29 @@
                                             alt="{{ $product->title }}">
                                     </div>
                                     <div>
-                                        <p class="text-sm font-medium">{{ $product->title }}
-                                            {{ $product->shopify_product_id }}</p>
+                                        <p class="text-sm font-medium">{{ $product->title }}</p>
                                     </div>
                                 </div>
                                 <hr>
                             </div>
-
                         @endforeach
+                        <div x-data="{
+                            observe() {
+                                let observer = new IntersectionObserver((entries) => {
+                                    entries.forEach(entry => {
+                                        if(entry.isIntersecting) {
+                                            @this.call('loadMore')
+                                        }
+                                    })
+                                }, {
+                                    root: null
+                                })
+
+                                observer.observe(this.$el)
+                            }
+                        }" x-init="observe">
+
+                        </div>
                     </div>
                 </div>
             </div>

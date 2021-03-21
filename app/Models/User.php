@@ -86,10 +86,10 @@ class User extends Authenticatable implements IShopModel
         ]);
     }
 
-    public function getProduct()
+    public function getProduct(int $productId)
     {
         return collect(
-            $this->api()->rest('GET', '/admin/products/6549307195599.json')['body']['product']
+            $this->api()->rest('GET', "/admin/products/{$productId}.json")['body']['product']
         );
     }
 }

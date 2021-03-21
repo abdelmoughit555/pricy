@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class Steps extends Component
 {
-    public $currentStep = 2;
+    public $currentStep = 1;
     public $totalSteps = 2;
     public $isLoading = false;
 
@@ -15,7 +15,8 @@ class Steps extends Component
     public function nextStep($productId)
     {
         $this->emit('fetchProductId', $productId);
-        $this->currentStep = 2;
+
+        $this->currentStep++;
     }
 
     public function render()

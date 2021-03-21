@@ -17,27 +17,11 @@ class SecondStep extends Component
 
     protected $listeners = ['fetchProductId'];
 
-    public function mount()
-    {
-        $this->isFetching = true;
-
-        $this->product = auth()->user()->getProduct();
-
-        $this->variants = $this->product["variants"];
-
-        $this->addNewTest();
-
-        $this->isFetching = false;
-    }
-
-
     public function fetchProductId($productId)
     {
         $this->isFetching = true;
 
         $this->product = auth()->user()->getProduct($productId);
-
-        dd($this->product);
 
         $this->variants = $this->product["variants"];
 

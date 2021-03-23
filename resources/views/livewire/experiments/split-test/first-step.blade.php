@@ -5,9 +5,9 @@
                 <div class="flex flex-col px-12 pt-12 pb-4 mt-8 rounded-lg bg-pricy-gray-100" style="height: 394px">
                     <h2 class="font-semibold text-gray-800 text-pricy-base">Whish producy would you like to test?</h2>
                     <div class="relative mt-8">
-                        <input @click="openProducts = !openProducts" type="text"
-                            class="w-full px-8 py-3 text-sm placeholder-gray-600 rounded-lg outline-none text-pricy-gray-400"
-                            placeholder="Search Product">
+                        <input wire:model="searchTearm" type="text"
+                            class="w-full px-8 py-3 text-sm placeholder-gray-500 rounded-lg outline-none text-pricy-gray-400"
+                            placeholder="Search Product ({{ $products->total() }})">
                         <div class="absolute left-2 top-3">
                             <svg width="20" height="20" viewBox="0 0 23 23" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">

@@ -7,6 +7,7 @@ use Livewire\Component;
 class FirstStep extends Component
 {
     public $perPage = 17;
+    public $searchTearm;
 
     public function loadMore()
     {
@@ -15,10 +16,12 @@ class FirstStep extends Component
 
     public function render()
     {
-        $products = auth()->user()->products()->paginate($this->perPage);
+        $searchTearm = '%' . $this->searchTearm . '%';
+
+        $products = auth()->user()->products()->where('title', 'like', $searchTearm)->paginate($this->perPage);
 
         return view('livewire.experiments.split-test.first-step', [
-            'products' => $products
+            'products' => $products,
         ]);
     }
 }

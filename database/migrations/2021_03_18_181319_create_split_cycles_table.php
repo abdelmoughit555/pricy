@@ -23,7 +23,7 @@ class CreateSplitCyclesTable extends Migration
             $table->string('new_price');
             $table->string('status');
             $table->unsignedBigInteger('split_test_id');
-            $table->foreign('split_test_id')->references('id')->on('split_tests');
+            $table->foreign('split_test_id')->references('id')->on('split_tests')->onDelete('cascade');
             $table->timestamps();
         });
     }

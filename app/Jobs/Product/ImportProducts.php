@@ -35,14 +35,8 @@ class ImportProducts implements ShouldQueue
 
         if (auth()->user()->alreadyImportatedProducts()) return;
 
-        $products = $shop->api()->rest('GET', '/admin/products.json', [
-            'query' => "fields=id,image,title"
-        ])['body']['products'];
+        $count = $shop->countProducts();
 
-        LazyCollection::make($products)->each(function ($product) use ($shop) {
-            $shop->storeProduct($product);
-        });
-
-        $shop->fistConnectionAndImportatedAt();
+        $shop->importProducts($count);
     }
 }

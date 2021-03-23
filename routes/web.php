@@ -29,15 +29,4 @@ Route::prefix('/create-experiment')->middleware(['auth.shopify'])->group(functio
     });
 });
 
-Route::get('/test', [TestController::class, 'index'])->middleware(['auth.shopify'])->name('test');;
-
-/* $splitTest = SplitTest::with('splitCycles')->first();
-foreach ($splitTest->splitCycles as $splitCycle) {
-    StartSplitTest::dispatch(auth()->user(), $splitCycle);
-} */
-    /*     $splitTest = SplitTest::with('splitCycles')->first();
-    $splitTest->splitCycles->each(function ($splitCycle) {
-        $splitCycle->delete();
-    });
-
-    $splitTest->delete(); */
+Route::get('/test', [TestController::class, 'index'])->middleware(['auth.shopify'])->name('test');

@@ -10,23 +10,9 @@ class TestController extends Controller
 {
     public function index()
     {
-        $splitTest = SplitTest::with('splitCycles')->first();
-        $splitTest->splitCycles->each(function ($splitCycle) {
-            $splitCycle->delete();
-        });
-        $splitTest->delete();
+        $shop = auth()->user();
+        $count = $shop->countProducts();
 
-        /*        $updatePrice = auth()->user()->api()->rest(
-            'PUT',
-            "/admin/api/variants/39299535208655.json",
-            ['query' => [
-                'variant' => [
-                    'id' => '39299535208655',
-                    'price' => "333"
-                ]
-            ]]
-        );
-
-        return $updatePrice; */
+        $shop->importProducts($count);
     }
 }

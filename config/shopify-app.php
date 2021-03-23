@@ -352,7 +352,7 @@ return [
         [
             'job' => App\Jobs\Product\ImportProducts::class, // example: env('AFTER_AUTHENTICATE_JOB')
             'inline' => true // False = dispatch job for later, true = dispatch immediately env('AFTER_AUTHENTICATE_JOB_INLINE', false)
-        ],
+        ]
     ],
 
     /*

@@ -21,7 +21,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('shop_id');
             $table->longText('image');
 
-            $table->foreign('shop_id')->references('id')->on('users');
+            $table->foreign('shop_id')->references('id')->on('users')->onDelete('cascade');;
             $table->timestamps();
         });
     }

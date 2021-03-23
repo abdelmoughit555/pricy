@@ -19,8 +19,8 @@ class CreateSplitTestsTable extends Migration
             $table->longText('title');
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
-            $table->foreign('shop_id')->references('id')->on('users');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('shop_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });

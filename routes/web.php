@@ -17,16 +17,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->middleware(['auth.shopify'])->name('home');
+Route::middleware(['auth.shopify'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::prefix('/create-experiment')->middleware(['auth.shopify'])->group(function () {
-    Route::get('/', function () {
-        return view('experiments.create-experiment');
+    Route::get('/tutorial', function () {
+        return view('experiments.tutorial');
     });
 
-    Route::get('/split-test', function () {
-        return view('experiments.split-test.create');
+    Route::prefix('/create-experiment')->group(function () {
+        Route::get('/', function () {
+            return view('experiments.create-experiment');
+        });
+
+        Route::get('/split-test', function () {
+            return view('experiments.split-test.create');
+        });
     });
+
+    Route::get('/test', [TestController::class, 'index'])->name('test');
 });
-
-Route::get('/test', [TestController::class, 'index'])->middleware(['auth.shopify'])->name('test');

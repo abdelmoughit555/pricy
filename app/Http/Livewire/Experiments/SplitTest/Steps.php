@@ -8,7 +8,6 @@ class Steps extends Component
 {
     public $currentStep = 1;
     public $totalSteps = 2;
-    public $isLoading = false;
 
     protected $listeners = ['incrementStep' => 'nextStep'];
 

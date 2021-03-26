@@ -1,12 +1,9 @@
-<div class="container w-2/3 h-full mx-auto mt-44" x-data="{ openProducts: false }">
+<div class="container mx-auto mt-44">
     <div class="w-full ">
-
-        <!--step 1 -->
         @if ($currentStep === 1)
-            <livewire:experiments.split-test.first-step>
-            @elseif ($currentStep === 2)
-                @livewire('experiments.split-test.second-step')
+            @livewire('experiments.split-test.first-step')
+        @else
+            @livewire('experiments.split-test.second-step')
         @endif
     </div>
-
 </div>

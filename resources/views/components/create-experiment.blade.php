@@ -27,9 +27,9 @@
                             boosting conversions.</p>
                     </div>
                     <div class="mt-6">
-                        <button type="submit"
+                        <a href="{{ url('create-experiment/split-test') }}"
                             class="px-5 py-3 text-xs font-medium text-gray-100 bg-gray-900 rounded">Choose a
-                            strategy</button>
+                            strategy</a>
                     </div>
                 </form>
 

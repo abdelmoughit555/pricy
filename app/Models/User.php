@@ -55,6 +55,11 @@ class User extends Authenticatable implements IShopModel
         return $this->hasMany(Product::class, 'shop_id');
     }
 
+    public function splitTests()
+    {
+        return $this->hasMany(SplitTest::class, 'shop_id');
+    }
+
     public function fistConnectionAndImportatedAt()
     {
         $now = Carbon::now();

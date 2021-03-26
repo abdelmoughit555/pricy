@@ -2,15 +2,11 @@
 
 namespace App\Http\Livewire\Experiments\SplitTest;
 
-use App\Jobs\SplitTest\StartSplitTest;
-use App\Models\Product;
 use App\Models\SplitCycle;
-use App\Models\SplitTest;
 use Livewire\Component;
 
 class SecondStep extends Component
 {
-    public $isFetching = false;
     public $product = [];
     public $variants = [];
     public $tests = [];
@@ -19,15 +15,11 @@ class SecondStep extends Component
 
     public function fetchProductId($productId)
     {
-        $this->isFetching = true;
-
         $this->product = auth()->user()->getProduct($productId);
 
         $this->variants = $this->product["variants"];
 
         $this->addNewTest();
-
-        $this->isFetching = false;
     }
 
     public function incrementPrice($testKey, $productKey)
@@ -62,9 +54,7 @@ class SecondStep extends Component
     public function finshSplitTest()
     {
         $product = auth()->user()->products()
-            ->where('shopify_product_id', '6549307195599')
             ->first();
-
 
         $splitTest = $product->splitTests()->create([
             'shop_id' => $product->shop_id,
@@ -74,30 +64,15 @@ class SecondStep extends Component
         foreach ($this->tests as $test) {
             foreach ($test['variants'] as $variant) {
                 $splitTest->splitCycles()->create([
-                    'start_at' => '2021-03-20', // test["date"],
-                    'end_at' => '2021-03-21', // test["date"],
+                    'start_at' => '2021-03-20', // test["start_at"],
+                    'end_at' => '2021-03-21', // test["end_at"],
                     'variant_id' => $variant['variant_id'],
                     'new_price' => $variant['new_price'],
                     'old_price' => $variant['old_price'],
                     'status' => SplitCycle::PENDING
                 ]);
-
-                /*                 $splitTest->splitCycles()->create([
-                    'start_at' => '2020-12-02', // test["date"],
-                    'end_at' => '2020-12-02', // test["date"],
-                    'variant_id' => $variant['variant_id'],
-                    'new_price' => $variant['price'],
-                    'old_price' => $variant['price'],
-                    'status' => SplitCycle::PENDING
-                ]); */
             }
         }
-
-        /*
-        $splitTest = $splitTest->fresh();
-        foreach ($splitTest->splitCycles as $splitCycle) {
-            StartSplitTest::dispatch(auth()->user(), $splitCycle);
-        } */
     }
 
     public function render()

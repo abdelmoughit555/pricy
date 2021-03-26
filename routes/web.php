@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', function () {
+    if (auth()->user()) {
+        return redirect()->route('home');
+    }
+    return view('login');
+})->name('login');
+
+
 Route::middleware(['auth.shopify'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 

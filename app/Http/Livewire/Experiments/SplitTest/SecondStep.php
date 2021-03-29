@@ -10,8 +10,9 @@ class SecondStep extends Component
     public $product = [];
     public $variants = [];
     public $tests = [];
+    public $isLoading = true;
 
-    protected $listeners = ['fetchProductId'];
+    protected $listeners = ['fetchProductId', 'finshSplitTest'];
 
     public function fetchProductId($productId)
     {
@@ -20,6 +21,8 @@ class SecondStep extends Component
         $this->variants = $this->product["variants"];
 
         $this->addNewTest();
+
+        $this->isLoading = false;
     }
 
     public function incrementPrice($testKey, $productKey)
@@ -54,6 +57,7 @@ class SecondStep extends Component
     public function finshSplitTest()
     {
         $product = auth()->user()->products()
+            ->where('shopify_product_id', $this->product['id'])
             ->first();
 
         $splitTest = $product->splitTests()->create([
@@ -73,6 +77,8 @@ class SecondStep extends Component
                 ]);
             }
         }
+
+        redirect('/');
     }
 
     public function render()

@@ -10,9 +10,7 @@ class TestController extends Controller
 {
     public function index()
     {
-        $shop = auth()->user();
-        $count = $shop->countProducts();
-
-        $shop->importProducts($count);
+        $shop = auth()->user()->api()->rest('GET', '/admin/shop.json')['body']['shop'];
+        dd($shop);
     }
 }

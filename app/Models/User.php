@@ -28,7 +28,9 @@ class User extends Authenticatable implements IShopModel
         'email',
         'password',
         'first_connection_at',
-        'imported_product_at'
+        'imported_product_at',
+        'currency',
+        'country'
     ];
 
     /**
@@ -49,6 +51,11 @@ class User extends Authenticatable implements IShopModel
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function avatar()
+    {
+        return 'https://www.gravatar.com/avatar/' . md5($this->email) . '?d=mp';
+    }
 
     public function products()
     {

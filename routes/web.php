@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\TestController;
-use App\Jobs\SplitTest\StartSplitTest;
-use App\Models\SplitTest;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,12 +34,14 @@ Route::middleware(['auth.shopify'])->group(function () {
     Route::prefix('/create-experiment')->group(function () {
         Route::get('/', function () {
             return view('experiments.create-experiment');
-        });
+        })->name('create-an-expirement');
 
         Route::get('/split-test', function () {
             return view('experiments.split-test.create');
-        });
+        })->name('create-split-test');
     });
 
     Route::get('/test', [TestController::class, 'index'])->name('test');
+
+    Route::get('/logout', [LogoutController::class, 'index'])->name('logout');
 });

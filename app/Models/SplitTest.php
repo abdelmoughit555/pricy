@@ -15,6 +15,7 @@ class SplitTest extends Model
         'title',
         'product_id',
         'shop_id',
+        'is_active'
     ];
 
     public static function boot()

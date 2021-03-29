@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Product;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,7 +22,6 @@ class ImportProducts implements ShouldQueue
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -33,10 +33,17 @@ class ImportProducts implements ShouldQueue
     {
         $shop = auth()->user();
 
-        if (auth()->user()->alreadyImportatedProducts()) return;
+        if ($shop->alreadyImportatedProducts()) return;
 
         $count = $shop->countProducts();
 
         $shop->importProducts($count);
+
+        $shopInfo = $shop->api()->rest('GET', '/admin/shop.json')['body']['shop'];
+
+        $shop->update([
+            'currency' => $shopInfo['currency'],
+            'country' => $shopInfo['country']
+        ]);
     }
 }

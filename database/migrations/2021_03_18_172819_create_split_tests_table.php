@@ -17,6 +17,7 @@ class CreateSplitTestsTable extends Migration
             $table->id();
             $table->string('uuid');
             $table->longText('title');
+            $table->boolean('is_active')->default(false);
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

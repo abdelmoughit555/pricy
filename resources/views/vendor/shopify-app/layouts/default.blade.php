@@ -21,7 +21,10 @@
 </head>
 
 <body>
-    @yield('content')
+    <x-navbar />
+    <div class="mt-16">
+        @yield('content')
+    </div>
 
     @if (\Osiset\ShopifyApp\getShopifyConfig('appbridge_enabled'))
         <script

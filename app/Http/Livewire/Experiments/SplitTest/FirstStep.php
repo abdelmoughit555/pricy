@@ -18,7 +18,9 @@ class FirstStep extends Component
     {
         $searchTearm = '%' . $this->searchTearm . '%';
 
-        $products = auth()->user()->products()->where('title', 'like', $searchTearm)->paginate($this->perPage);
+        $products = auth()->user()->products()->whereDoesntHave('splitTests', function ($query) {
+            $query->where('is_active', 1);
+        })->where('title', 'like', $searchTearm)->paginate($this->perPage);
 
         return view('livewire.experiments.split-test.first-step', [
             'products' => $products,

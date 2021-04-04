@@ -14,16 +14,7 @@ class SplitCycle extends Model
     const RUNNING = "running";
     const FINISHED = "finshed";
 
-    protected $fillable = [
-        'uuid',
-        'start_at',
-        'end_at',
-        'split_test_id',
-        'variant_id',
-        'old_price',
-        'new_price',
-        'status'
-    ];
+    protected $fillable = ['uuid', 'start_at', 'end_at', 'split_test_id', 'variant_id', 'old_price', 'new_price', 'status'];
 
     protected $cast = [
         'start_at' => 'date',
@@ -42,6 +33,11 @@ class SplitCycle extends Model
     public function splitTest()
     {
         return $this->belongsTo(SplitTest::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Orders::class);
     }
 
     public function createNewCycle($varinatCycle)

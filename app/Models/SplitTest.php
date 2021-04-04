@@ -18,6 +18,15 @@ class SplitTest extends Model
         'is_active'
     ];
 
+
+    public function getTotalOrdersAttribute()
+    {
+        return $this->splitCycles->sum(function ($splitCycle) {
+            return $splitCycle->orders->sum(function ($order) {
+                return $order->quantity;
+            });
+        });
+    }
     public static function boot()
     {
         parent::boot();
@@ -40,5 +49,10 @@ class SplitTest extends Model
     public function splitCycles()
     {
         return $this->hasMany(SplitCycle::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasManyThrough(Orders::class, SplitCycle::class);
     }
 }

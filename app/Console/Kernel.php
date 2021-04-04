@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\{SplitTestFinisherCommand, SplitTestStarterCommand};
+use App\Console\Commands\{OrderFaker, SplitTestFinisherCommand, SplitTestStarterCommand};
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         SplitTestStarterCommand::class,
         SplitTestFinisherCommand::class,
+        OrderFaker::class,
     ];
 
     /**
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('faker:order')->everyMinute();
         //run split test of today
         $schedule->command('splittest:start')->daily();
         //end split test of today

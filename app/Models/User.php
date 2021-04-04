@@ -15,6 +15,8 @@ use Illuminate\Support\Str;
 class User extends Authenticatable implements IShopModel
 {
     use HasFactory, Notifiable, ShopModel;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
 
     const PER_PAGE = 250;
 
@@ -65,6 +67,16 @@ class User extends Authenticatable implements IShopModel
     public function splitTests()
     {
         return $this->hasMany(SplitTest::class, 'shop_id');
+    }
+
+    public function splitCycles()
+    {
+        return $this->hasManyThrough(SplitCycle::class, SplitTest::class, 'shop_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasManyDeepFromRelations($this->splitCycles(), (new SplitCycle)->orders());
     }
 
     public function fistConnectionAndImportatedAt()

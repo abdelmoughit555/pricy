@@ -170,7 +170,7 @@ return [
     |
     */
 
-    'api_scopes' => env('SHOPIFY_API_SCOPES', 'read_products,write_products,read_analytics,read_orders'),
+    'api_scopes' => env('SHOPIFY_API_SCOPES', 'read_products,write_products,read_analytics,read_orders,write_orders'),
 
     /*
     |--------------------------------------------------------------------------
@@ -307,15 +307,16 @@ return [
     'webhooks' => [
         [
             'topic' => 'products/update',
-            'address' => 'https://pricy.test/webhook/update-product'
+            'address' => 'https://f19d3ed7ec51.eu.ngrok.io/webhook/products-update'
+        ],
+        [
+            'topic' => 'products/delete',
+            'address' => 'https://f19d3ed7ec51.eu.ngrok.io/webhook/products-delete'
+        ],
+        [
+            'topic' => 'orders/create',
+            'address' => 'https://f19d3ed7ec51.eu.ngrok.io/webhook/orders-create'
         ]
-        /*
-            [
-                'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'orders/create'),
-                'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://some-app.com/webhook/orders-create')
-            ],
-            ...
-        */
     ],
 
     /*

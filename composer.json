@@ -17,7 +17,8 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.4",
         "osiset/laravel-shopify": "^16.0",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "staudenmeir/eloquent-has-many-deep": "^1.7"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

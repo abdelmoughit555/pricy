@@ -3,6 +3,7 @@
 namespace App\Jobs\SplitTest;
 
 use App\Models\SplitCycle;
+use App\Models\SplitTest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -46,5 +47,7 @@ class EndSplitTestJob implements ShouldQueue
         $this->splitCycle->update([
             'status' => SplitCycle::FINISHED
         ]);
+
+        SplitTest::find($this->splitCycle->splittest_id)
     }
 }

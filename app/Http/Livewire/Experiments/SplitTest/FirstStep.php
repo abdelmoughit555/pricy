@@ -18,7 +18,7 @@ class FirstStep extends Component
     {
         $searchTearm = '%' . $this->searchTearm . '%';
 
-        $products = auth()->user()->products()->whereDoesntHave('splitTests', function ($query) {
+        $products = auth()->user()->products()->latest()->whereDoesntHave('splitTests', function ($query) {
             $query->where('is_active', 1);
         })->where('title', 'like', $searchTearm)->paginate($this->perPage);
 

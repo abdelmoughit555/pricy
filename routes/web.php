@@ -41,7 +41,9 @@ Route::middleware(['auth.shopify'])->group(function () {
         })->name('create-split-test');
     });
 
-    Route::get('/test', [TestController::class, 'index'])->name('test');
-
+    /*     Route::get('/test', [TestController::class, 'index'])->name('test');
+ */
     Route::get('/logout', [LogoutController::class, 'index'])->name('logout');
 });
+
+Route::get('/test', [TestController::class, 'index'])->name('test');

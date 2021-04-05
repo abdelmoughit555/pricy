@@ -2,10 +2,9 @@
 
 namespace App\Jobs\SplitTest;
 
+use App\Events\SplitTestEndedEvent;
 use App\Models\SplitCycle;
-use App\Models\SplitTest;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,14 +14,15 @@ class EndSplitTestJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $splitCycle;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(SplitCycle $splitCycle)
     {
-        //
+        $this->splitCycle = $splitCycle;
     }
 
     /**
@@ -33,6 +33,7 @@ class EndSplitTestJob implements ShouldQueue
     public function handle()
     {
         $showOwner = $this->splitCycle->splitTest->shopOwner;
+
         $showOwner->api()->rest(
             'PUT',
             "/admin/api/variants/{$this->splitCycle->variant_id}.json",
@@ -48,6 +49,6 @@ class EndSplitTestJob implements ShouldQueue
             'status' => SplitCycle::FINISHED
         ]);
 
-        SplitTest::find($this->splitCycle->splittest_id)
+        event(new SplitTestEndedEvent($this->splitCycle->splitTest));
     }
 }

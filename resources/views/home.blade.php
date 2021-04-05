@@ -4,7 +4,7 @@
     <div class="container mx-auto mt-24">
         <div class="flex space-x-8">
             <div class="px-4 py-6 bg-pricy-yellow rounded-xl" style="width: 260px; height:400px">
-                @livewire('dashboard.swipers')
+                <x-dashboard.swiper />
             </div>
             <div class="flex-1 ">
                 <div>

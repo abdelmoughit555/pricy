@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\SplitTest\EndSplitTestJob;
 use App\Models\SplitCycle;
+use App\Models\SplitTest;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

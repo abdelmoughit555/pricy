@@ -34,6 +34,7 @@ class SecondStep extends Component
     {
         array_push($this->tests, [
             'start_at' => '',
+            'end_at' => '',
             'variants' => $this->variantsProduct()
         ]);
     }
@@ -44,7 +45,7 @@ class SecondStep extends Component
         foreach ($this->variants as $variant) {
             array_push($variants, [
                 'start_at' => '2020-12-12',
-                'end_at' =>  '2020-12-12',
+                'end_at' =>  '2021-04-05',
                 'old_price' => $variant['price'],
                 'new_price' => $variant['price'],
                 'variant_id' => $variant['id']

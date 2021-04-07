@@ -61,12 +61,7 @@ class ProductsDeleteJob implements ShouldQueue
 
         if (!$product) return;
 
-        $product->splitTests->each(function ($splitTest) {
-            $splitTest->splitCycles->each(function ($splitCycle) {
-                $splitCycle->delete();
-            });
-            $splitTest->delete();
-        });
+        $product->deleteRelatedRelationship();
 
         $product->delete();
     }

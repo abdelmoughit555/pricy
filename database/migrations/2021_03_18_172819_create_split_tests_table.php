@@ -20,6 +20,7 @@ class CreateSplitTestsTable extends Migration
             $table->boolean('is_active')->default(true);
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('product_id');
+            $table->timestamp('deadline');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('shop_id')->references('id')->on('users')->onDelete('cascade');
 

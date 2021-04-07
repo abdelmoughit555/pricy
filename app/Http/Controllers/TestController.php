@@ -12,11 +12,19 @@ class TestController extends Controller
 {
     public function index()
     {
-        $user = User::first();
-        $splitTests = $user->splitTests()->withSum('orders', 'quantity')->paginate();
+        $shop = User::first();
 
-        return view('test', [
-            'splitTests' => $splitTests
+        /*         if ($shop->alreadyImportatedProducts()) return; */
+
+        $count = $shop->countProducts();
+
+        $shop->importProducts($count);
+
+        $shopInfo = $shop->api()->rest('GET', '/admin/shop.json')['body']['shop'];
+
+        $shop->update([
+            'currency' => $shopInfo['currency'],
+            'country' => $shopInfo['country']
         ]);
     }
 }

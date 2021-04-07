@@ -20,6 +20,8 @@ class User extends Authenticatable implements IShopModel
 
     const PER_PAGE = 250;
 
+    public $page_info;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -137,30 +139,47 @@ class User extends Authenticatable implements IShopModel
         });
     }
 
-    public function importProducts($count, $page_info = "")
+    public function importProducts($count)
     {
         $currentCount = $count;
         $perPage = User::PER_PAGE;
-        $params = ['fields' => 'id,image,title', 'limit' => $perPage];
-        if ($page_info) {
-            $params = $params + ['page_info' => $page_info, 'rel' => 'next'];
+
+        $params = ['fields' => 'id,image,title'];
+        if ($this->page_info) {
+            $params = $params + ['page_info' => $this->page_info];
         }
 
         if ($currentCount > $perPage) {
             $currentCount = $currentCount - $perPage;
 
-            $products = $this->getProducts(['fields' => 'id,image,title', 'limit' => $perPage]);
-            $page_info = pageInfo($products['response']->getHeaders()['Link'][0], '<', '>');
+            $params = $params + ['limit' => $perPage];
+
+
+            $products = $this->getProducts($params);
+            $headers = $products['response']->getHeaders();
+
+            if (isset($headers['Link'][0])) {
+                $links = explode(',', $headers['Link'][0]);
+                foreach ($links as $link) {
+                    if (strpos($link, 'rel="next"')) {
+                        preg_match('~<(.*?)>~', $link, $next);
+                        $url_components = parse_url($next[1]);
+                        parse_str($url_components['query'], $params);
+                        $this->page_info = $params['page_info'];
+                    }
+                }
+            }
 
             $this->lazilyMakeProducts($products['body']['products']);
 
-            $this->importProducts($currentCount, $page_info);
+            $this->importProducts($currentCount);
         } else {
-            $products = $this->getProducts(['fields' => 'id,image,title', 'limit' => $currentCount]);
+            $params = $params + ['limit' => $currentCount];
+
+            $products = $this->getProducts($params);
 
             $this->lazilyMakeProducts($products['body']['products']);
         }
-
         $this->fistConnectionAndImportatedAt();
     }
 }

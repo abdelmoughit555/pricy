@@ -58,12 +58,14 @@ class ProductsUpdateJob implements ShouldQueue
         $user = User::where('name', $name)->first();
         $data = $this->data;
 
-        Product::updateOrCreate([
+        $product = Product::updateOrCreate([
             'shop_id' => $user->id,
             'shopify_product_id' => $data->id
         ], [
             'title' => $data->title,
             'image' => $data->image->src,
         ]);
+
+        $product->deleteRelatedRelationship();
     }
 }

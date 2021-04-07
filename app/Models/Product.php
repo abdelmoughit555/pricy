@@ -36,4 +36,14 @@ class Product extends Model
     {
         return $this->hasMany(SplitTest::class);
     }
+
+    public function deleteRelatedRelationship()
+    {
+        $this->splitTests->each(function ($splitTest) {
+            $splitTest->splitCycles->each(function ($splitCycle) {
+                $splitCycle->delete();
+            });
+            $splitTest->delete();
+        });
+    }
 }

@@ -15,18 +15,14 @@ class SplitTest extends Model
         'title',
         'product_id',
         'shop_id',
-        'is_active'
+        'is_active',
+        'deadline'
     ];
 
+    protected $cast = [
+        'deadline' => 'date'
+    ];
 
-    public function getTotalOrdersAttribute()
-    {
-        return $this->splitCycles->sum(function ($splitCycle) {
-            return $splitCycle->orders->sum(function ($order) {
-                return $order->quantity;
-            });
-        });
-    }
     public static function boot()
     {
         parent::boot();

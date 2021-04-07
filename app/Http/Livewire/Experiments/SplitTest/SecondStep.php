@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Experiments\SplitTest;
 
 use App\Models\SplitCycle;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class SecondStep extends Component
@@ -10,11 +11,30 @@ class SecondStep extends Component
     public $product = [];
     public $variants = [];
     public $tests = [];
+    public $errorMessage = '';
+    public $currentLoop  = 1;
     public $isLoading = true;
+    public $currentStartAt = "";
+    public $currentEndAt = "";
 
     protected $listeners = ['fetchProductId', 'finshSplitTest'];
 
-    public function fetchProductId($productId)
+    public function mount()
+    {
+        $this->product = auth()->user()->getProduct(6553892389071);
+
+        $this->variants = $this->product["variants"];
+
+        array_push($this->tests, [
+            'start_at' => '',
+            'end_at' => '',
+            'variants' => $this->variantsProduct(),
+            'has_error' => false
+        ]);
+
+        $this->isLoading = false;
+    }
+    /*     public function fetchProductId($productId)
     {
         $this->product = auth()->user()->getProduct($productId);
 
@@ -23,7 +43,7 @@ class SecondStep extends Component
         $this->addNewTest();
 
         $this->isLoading = false;
-    }
+    } */
 
     public function incrementPrice($testKey, $productKey)
     {
@@ -32,11 +52,69 @@ class SecondStep extends Component
 
     public function addNewTest()
     {
+        $this->errorMessage = "";
+        if (!$this->checkDateValidation()) return;
+        $this->checkDateValidation();
         array_push($this->tests, [
             'start_at' => '',
             'end_at' => '',
-            'variants' => $this->variantsProduct()
+            'variants' => $this->variantsProduct(),
+            'has_error' => false
         ]);
+
+        $this->totalTest = count($this->tests);
+    }
+
+    protected function checkdateValidation()
+    {
+        $this->validate([
+            'tests.*.start_at' => 'required',
+            'tests.*.end_at' => 'required',
+            'tests.*.variants.*.old_price' => 'required',
+            'tests.*.variants.*.new_price' => 'required',
+            'tests.*.variants.*.variant_id' => 'required',
+        ]);
+
+        $status = true;
+        foreach ($this->tests as $key => $test) {
+            $startAt = Carbon::parse($test['start_at']);
+            $endAt = Carbon::parse($test['end_at']);
+
+            if (is_null($startAt) || is_null($endAt)) {
+                $this->errorMessage = 'please fix';
+                break;
+            }
+
+            $passCycle = $startAt > $endAt;
+            if ($key == 0) {
+                if ($passCycle) {
+                    $this->tests[$key]['has_error'] = true;
+                    $this->errorMessage = 'please fix';
+                    $status = false;
+                } else {
+                    $this->tests[$key]['has_error'] = false;
+                }
+            } else {
+                $previousStartAt = Carbon::parse($this->tests[$key - 1]['start_at']);
+                $previousEndAt = Carbon::parse($this->tests[$key - 1]['end_at']);
+
+                $passStartAt = $startAt > $previousStartAt && $startAt > $previousEndAt;
+
+                $passEndAt = $endAt > $previousStartAt  && $endAt > $previousEndAt;
+
+                if (!($passStartAt && $passEndAt) || $passCycle) {
+                    $this->tests[$key]['has_error'] = true;
+                    $this->errorMessage = 'please fix';
+                    $status = false;
+                } else {
+                    $this->tests[$key]['has_error'] = false;
+                }
+
+                $this->currentStartAt = $startAt->format('yyyy-mm-dd');
+                $this->currentEndAt = $endAt->format('yyyy-mm--dd');
+            }
+        }
+        return $status;
     }
 
     protected function variantsProduct()
@@ -44,8 +122,6 @@ class SecondStep extends Component
         $variants = [];
         foreach ($this->variants as $variant) {
             array_push($variants, [
-                'start_at' => '2020-12-12',
-                'end_at' =>  '2021-04-05',
                 'old_price' => $variant['price'],
                 'new_price' => $variant['price'],
                 'variant_id' => $variant['id']
@@ -63,14 +139,15 @@ class SecondStep extends Component
 
         $splitTest = $product->splitTests()->create([
             'shop_id' => $product->shop_id,
-            'title' => $product->title
+            'title' => $product->title,
+            'deadline' => $this->tests[array_key_last($this->tests)]['end_at']
         ]);
 
         foreach ($this->tests as $test) {
             foreach ($test['variants'] as $variant) {
                 $splitTest->splitCycles()->create([
-                    'start_at' => '2021-03-20', // test["start_at"],
-                    'end_at' => '2021-03-21', // test["end_at"],
+                    'start_at' => Carbon::parse($test['start_at'])->format('Y-m-d'),
+                    'end_at' => Carbon::parse($test['end_at'])->format('Y-m-d'),
                     'variant_id' => $variant['variant_id'],
                     'new_price' => $variant['new_price'],
                     'old_price' => $variant['old_price'],

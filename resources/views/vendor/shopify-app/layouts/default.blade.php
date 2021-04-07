@@ -45,6 +45,7 @@
     @endif
 
     @livewireScripts
+    <script src="https://unpkg.com/moment"></script>
     <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 

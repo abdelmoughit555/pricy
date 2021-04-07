@@ -2,6 +2,14 @@
     <div>
         <p class="font-semibold text-pricy-base text-pricy-gray-400">Step 2/3 :</p>
     </div>
+    @foreach ($errors->all() as $message)
+        {{ $message }}
+    @endforeach
+    @if ($errorMessage)
+        <div class="px-6 py-6 mt-4 bg-red-500">
+            <p class="text-white">{{ $errorMessage }}</p>
+        </div>
+    @endif
     <div class="mt-12">
         @if ($isLoading)
             <div class="flex flex-col items-center justify-center">
@@ -27,7 +35,13 @@
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
-                                            <p class="text-sm font-medium text-pricy-gray-400 w-52">Split Cycle</p>
+                                            <p class="text-sm font-medium text-pricy-gray-400 w-52">Split Cycle Start
+                                            </p>
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
+                                            <p class="text-sm font-medium text-pricy-gray-400 w-52">Split Cycle End
+                                            </p>
                                         </th>
                                         @if ($product)
                                             @foreach ($product['variants'] as $variant)
@@ -43,7 +57,7 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach ($tests as $testKey => $item)
-                                        <tr>
+                                        <tr class="@if ($item['has_error']) bordering @endif">
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <p class="text-sm font-medium text-pricy-gray-200 w-52">Split Test
                                                     {{ $testKey + 1 }}
@@ -51,12 +65,35 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="inline-block" x-data
-                                                    x-init="new Pikaday({ field: $refs.startAt })" class="relative">
+                                                    x-init="new Pikaday({ field: $refs.startAt, format: 'YYYY-MM-DD' })"
+                                                    class="relative">
                                                     <div class="relative w-52">
                                                         <input name=""
                                                             class="w-full h-10 px-2 text-sm font-medium text-gray-700 border rounded outline-none appearance-none "
                                                             x-ref="startAt" id=""
                                                             wire:model.lazy="tests.{{ $testKey }}.start_at">
+                                                        <div class="absolute top-4 right-4">
+                                                            <svg width="8" height="6" viewBox="0 0 8 6" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M3.29048 5.51685C3.63972 6.00078 4.36028 6.00078 4.70952 5.51685L7.32911 1.88706C7.74674 1.30836 7.33324 0.5 6.61958 0.5H1.38042C0.666761 0.5 0.253257 1.30836 0.670893 1.88705L3.29048 5.51685Z"
+                                                                    fill="#484A4F" fill-opacity="0.47" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="inline-block" x-data
+                                                    x-init="new Pikaday({ field: $refs.startAt, format: 'YYYY-MM-DD' })"
+                                                    class="relative">
+                                                    <div class="relative w-52">
+                                                        <input name=""
+                                                            class="w-full h-10 px-2 text-sm font-medium text-gray-700 border rounded outline-none appearance-none "
+                                                            x-ref="startAt" id=""
+                                                            wire:model.lazy="tests.{{ $testKey }}.end_at">
 
                                                         <div class="absolute top-4 right-4">
                                                             <svg width="8" height="6" viewBox="0 0 8 6" fill="none"
@@ -136,6 +173,10 @@
 </div>
 
 <style>
+    .bordering {
+        border: 1px rgba(239, 68, 68) solid !important;
+    }
+
     .lds-ring {
         display: inline-block;
         position: relative;

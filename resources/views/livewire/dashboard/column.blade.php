@@ -42,7 +42,7 @@
         @endif
     </td>
     <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-        11/12/2022 12:23
+        {{$splitTest->deadline}}
     </td>
     <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
         <button class="h-10 px-4 text-xs text-white bg-blue-600 rounded">Set

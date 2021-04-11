@@ -15,49 +15,62 @@ class SecondStep extends Component
     public $currentLoop  = 1;
     public $isLoading = true;
     public $currentStartAt = "";
-    public $currentEndAt = "";
 
     protected $listeners = ['fetchProductId', 'finshSplitTest'];
 
-    public function mount()
+    /*    public function mount()
     {
         $this->product = auth()->user()->getProduct(6553892389071);
 
         $this->variants = $this->product["variants"];
 
         array_push($this->tests, [
-            'start_at' => '',
-            'end_at' => '',
+            'name' => 'Split Test ' . count($this->tests) + 1,
+            'start_at' => Carbon::today()->format('Y-m-d'),
+            'end_at' => Carbon::tomorrow()->format('Y-m-d'),
             'variants' => $this->variantsProduct(),
             'has_error' => false
         ]);
 
         $this->isLoading = false;
-    }
-    /*     public function fetchProductId($productId)
+    } */
+    public function fetchProductId($productId)
     {
         $this->product = auth()->user()->getProduct($productId);
 
         $this->variants = $this->product["variants"];
 
-        $this->addNewTest();
-
+        array_push($this->tests, [
+            'name' => 'Split Test ' . count($this->tests) + 1,
+            'start_at' => Carbon::today()->format('Y-m-d'),
+            'end_at' => Carbon::tomorrow()->format('Y-m-d'),
+            'variants' => $this->variantsProduct(),
+            'has_error' => false
+        ]);
         $this->isLoading = false;
-    } */
+    }
 
     public function incrementPrice($testKey, $productKey)
     {
         $this->tests[$testKey]['variants'][$productKey]['new_price']++;
     }
 
+    public function decrementPrice($testKey, $productKey)
+    {
+        $price = $this->tests[$testKey]['variants'][$productKey]['new_price'];
+        if ($price > 0) {
+            $this->tests[$testKey]['variants'][$productKey]['new_price']--;
+        }
+    }
+
     public function addNewTest()
     {
         $this->errorMessage = "";
         if (!$this->checkDateValidation()) return;
-        $this->checkDateValidation();
         array_push($this->tests, [
-            'start_at' => '',
-            'end_at' => '',
+            'name' => 'Split Test ' . count($this->tests) + 1,
+            'start_at' => $this->currentStartAt->format('Y-m-d'),
+            'end_at' => $this->currentStartAt->addDay()->format('Y-m-d'),
             'variants' => $this->variantsProduct(),
             'has_error' => false
         ]);
@@ -68,10 +81,11 @@ class SecondStep extends Component
     protected function checkdateValidation()
     {
         $this->validate([
-            'tests.*.start_at' => 'required',
-            'tests.*.end_at' => 'required',
+            'tests.*.name' => 'required',
+            'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::today()->format('Y-m-d'),
+            'tests.*.end_at' => 'required|date|date_format:Y-m-d|after:tests.*.start_at',
             'tests.*.variants.*.old_price' => 'required',
-            'tests.*.variants.*.new_price' => 'required',
+            'tests.*.variants.*.new_price' => 'required|gt:0',
             'tests.*.variants.*.variant_id' => 'required',
         ]);
 
@@ -79,11 +93,6 @@ class SecondStep extends Component
         foreach ($this->tests as $key => $test) {
             $startAt = Carbon::parse($test['start_at']);
             $endAt = Carbon::parse($test['end_at']);
-
-            if (is_null($startAt) || is_null($endAt)) {
-                $this->errorMessage = 'please fix';
-                break;
-            }
 
             $passCycle = $startAt > $endAt;
             if ($key == 0) {
@@ -98,7 +107,7 @@ class SecondStep extends Component
                 $previousStartAt = Carbon::parse($this->tests[$key - 1]['start_at']);
                 $previousEndAt = Carbon::parse($this->tests[$key - 1]['end_at']);
 
-                $passStartAt = $startAt > $previousStartAt && $startAt > $previousEndAt;
+                $passStartAt = $startAt > $previousStartAt && $startAt >= $previousEndAt;
 
                 $passEndAt = $endAt > $previousStartAt  && $endAt > $previousEndAt;
 
@@ -109,10 +118,9 @@ class SecondStep extends Component
                 } else {
                     $this->tests[$key]['has_error'] = false;
                 }
-
-                $this->currentStartAt = $startAt->format('yyyy-mm-dd');
-                $this->currentEndAt = $endAt->format('yyyy-mm--dd');
             }
+
+            $this->currentStartAt = $endAt;
         }
         return $status;
     }
@@ -131,8 +139,17 @@ class SecondStep extends Component
         return $variants;
     }
 
+    public function deleteRow($row)
+    {
+        if (count($this->tests) == 1) return;
+        unset($this->tests[$row]);
+    }
+
     public function finshSplitTest()
     {
+        $this->errorMessage = "";
+        if (!$this->checkDateValidation()) return;
+
         $product = auth()->user()->products()
             ->where('shopify_product_id', $this->product['id'])
             ->first();

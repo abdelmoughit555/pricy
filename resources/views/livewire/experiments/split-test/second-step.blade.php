@@ -31,6 +31,10 @@
                                     <tr>
                                         <th scope="col"
                                             class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
+                                            <p class="text-sm font-medium text-pricy-gray-400 "></p>
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
                                             <p class="text-sm font-medium text-pricy-gray-400 ">Variants</p>
                                         </th>
                                         <th scope="col"
@@ -58,10 +62,14 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach ($tests as $testKey => $item)
                                         <tr class="@if ($item['has_error']) bordering @endif">
+                                            <td class="px-6 py-4">
+                                                <div wire:click="deleteRow({{ $testKey }})">
+                                                    delete
+                                                </div>
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <p class="text-sm font-medium text-pricy-gray-200 w-52">Split Test
-                                                    {{ $testKey + 1 }}
-                                                </p>
+                                                <input class="text-sm font-medium text-pricy-gray-200 w-52"
+                                                    wire:model="tests.{{ $testKey }}.name" value="rgergerg">
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="inline-block" x-data
@@ -138,7 +146,8 @@
                                                                         </svg>
 
                                                                     </div>
-                                                                    <div>
+                                                                    <div
+                                                                        wire:click="decrementPrice({{ $testKey }}, {{ $variantKey }})">
                                                                         <svg width="8" height="6" viewBox="0 0 8 6"
                                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                             <path

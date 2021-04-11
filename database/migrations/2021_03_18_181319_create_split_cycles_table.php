@@ -16,6 +16,7 @@ class CreateSplitCyclesTable extends Migration
         Schema::create('split_cycles', function (Blueprint $table) {
             $table->id();
             $table->string('uuid');
+            $table->string('name');
             $table->date('start_at');
             $table->date('end_at');
             $table->string('variant_id');

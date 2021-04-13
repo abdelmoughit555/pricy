@@ -25,28 +25,27 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Route::group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    Route::get('/tutorial', function () {
-        return view('experiments.tutorial');
-    });
-
-    Route::prefix('/create-experiment')->group(function () {
-        Route::get('/', function () {
-            return view('experiments.create-experiment');
-        })->name('create-an-expirement');
-
-        Route::get('/split-test', function () {
-            return view('experiments.split-test.create');
-        })->name('create-split-test');
-    });
-
-    Route::get('/split-test/{splitTest}', [SplitTestController::class, 'show'])->name('splittest.show');
-
-    /*     Route::get('/test', [TestController::class, 'index'])->name('test');
- */
-    Route::get('/logout', [LogoutController::class, 'index'])->name('logout');
+Route::get('/tutorial', function () {
+    return view('experiments.tutorial');
 });
+
+Route::prefix('/create-experiment')->group(function () {
+    Route::get('/', function () {
+        return view('experiments.create-experiment');
+    })->name('create-an-expirement');
+
+    Route::get('/split-test', function () {
+        return view('experiments.split-test.create');
+    })->name('create-split-test');
+});
+
+Route::get('/split-test/{splitTest}', [SplitTestController::class, 'show'])->name('splittest.show');
+
+/*     Route::get('/test', [TestController::class, 'index'])->name('test');
+ */
+Route::get('/logout', [LogoutController::class, 'index'])->name('logout');
+
 
 Route::get('/test', [TestController::class, 'index'])->name('test');

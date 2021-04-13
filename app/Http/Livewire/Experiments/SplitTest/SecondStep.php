@@ -69,7 +69,7 @@ class SecondStep extends Component
         $this->errorMessage = "";
         if (!$this->checkDateValidation()) return;
         array_push($this->tests, [
-            'name' => 'Split Test ' . (int) count($this->tests) + 1,
+            'name' => 'Split Test ',
             'start_at' => $this->currentStartAt->format('Y-m-d'),
             'end_at' => $this->currentStartAt->addDay()->format('Y-m-d'),
             'variants' => $this->variantsProduct(),

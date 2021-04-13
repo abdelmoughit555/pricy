@@ -25,7 +25,7 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Route::middleware(['auth.shopify'])->group(function () {
+Route::group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::get('/tutorial', function () {

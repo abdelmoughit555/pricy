@@ -42,7 +42,7 @@ class SecondStep extends Component
         $this->variants = $this->product["variants"];
 
         array_push($this->tests, [
-            'name' => 'Split Test ' . count($this->tests) + 1,
+            'name' => 'Split Test ',
             'start_at' => Carbon::today()->format('Y-m-d'),
             'end_at' => Carbon::tomorrow()->format('Y-m-d'),
             'variants' => $this->variantsProduct(),

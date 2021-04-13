@@ -307,15 +307,15 @@ return [
     'webhooks' => [
         [
             'topic' => 'products/update',
-            'address' => 'https://f19d3ed7ec51.eu.ngrok.io/webhook/products-update'
+            'address' => 'https://15b3f36444fc.ngrok.io/webhook/products-update'
         ],
         [
             'topic' => 'products/delete',
-            'address' => 'https://f19d3ed7ec51.eu.ngrok.io/webhook/products-delete'
+            'address' => 'https://15b3f36444fc.ngrok.io/webhook/products-delete'
         ],
         [
             'topic' => 'orders/create',
-            'address' => 'https://f19d3ed7ec51.eu.ngrok.io/webhook/orders-create'
+            'address' => 'https://15b3f36444fc.ngrok.io/webhook/orders-create'
         ]
     ],
 

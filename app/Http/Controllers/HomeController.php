@@ -10,9 +10,9 @@ class HomeController extends Controller
     {
         $user = auth()->user();
 
-        $splitTests = $user->splitTests()->withCount('splitCycles')->withSum('orders', 'quantity')->paginate();
+        $splitTests = '' /* $user->splitTests()->withCount('splitCycles')->withSum('orders', 'quantity')->paginate() */;
 
-        $dataChart = $user->orders()->createdLast(7)->get();
+        $dataChart = '' /* $user->orders()->createdLast(7)->get() */;
 
         if (is_null($splitTests)) {
             return redirect('/tutorial');

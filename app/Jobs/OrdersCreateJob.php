@@ -2,7 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Models\Order;
 use App\Models\SplitCycle;
+use App\Models\User;
+use App\Models\Variant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -50,21 +53,22 @@ class OrdersCreateJob implements ShouldQueue
      */
     public function handle()
     {
-        // Convert domain
         $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
+        $name = $this->shopDomain->toNative();
+        $user = User::where('name', $name)->first();
 
-        // Do what you wish with the data
-        // Access domain name as $this->shopDomain->toNative()
+        collect($this->data->line_items)->each(function ($lineItem) use ($user) {
+            $variant = Variant::whereHas('splitCycle', function ($query) {
+                $query->where('status', SplitCycle::FINISHED);
+            })->where('variant_id', $lineItem->variant_id)
+                ->first();
 
-        collect($this->data->line_items)->each(function ($lineItem) {
-            $SplitCycle = SplitCycle::where([
-                'status' => SplitCycle::RUNNING,
-                'variant_id' => $lineItem->variant_id
-            ])->first();
 
-            if (!$SplitCycle) return;
+            if (!$variant) return;
 
-            $SplitCycle->Orders()->create([
+            Order::create([
+                'shop_id' => $user->id,
+                'variant_id' => $variant->id,
                 'quantity' => $lineItem->quantity,
                 'order_shopify_id' => $this->data->id,
                 'price' => $lineItem->price,

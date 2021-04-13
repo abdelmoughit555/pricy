@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\SplitTestEnded;
 use App\Events\SplitTestEndedEvent;
 use App\Models\SplitCycle;
+use App\Models\SplitTest;
 
 class SplitTestIsFinishedCheckListeners
 {
@@ -22,13 +23,19 @@ class SplitTestIsFinishedCheckListeners
             return $splitCycle->status;
         });
 
+        $splitTestStatus = "";
+
+        if ($status->contains(SplitCycle::RUNNING)) {
+            $splitTestStatus = SplitTest::RUNNING;
+        }
         if (
-            $status->contains(SplitCycle::RUNNING) ||
-            $status->contains(SplitCycle::PENDING)
-        ) return;
+            $status->contains(SplitCycle::FINISHED) && !($status->contains(SplitCycle::RUNNING) || $status->contains(SplitCycle::PENDING))
+        ) {
+            $splitTestStatus = SplitTest::FINISHED;
+        }
 
         $splitTest->update([
-            'is_active' => false
+            'status' => $splitTestStatus
         ]);
     }
 }

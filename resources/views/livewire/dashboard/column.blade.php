@@ -13,10 +13,15 @@
 
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
-        @if ($splitTest->is_active)
+        @if ($splitTest->status === 'pending')
             <div class="flex items-center space-x-1 ">
-                <div class="w-2 h-2 rounded-full bg-green"></div>
-                <p class="text-sm capitalize text-green">active</p>
+                <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <p class="text-sm text-yellow-500 capitalize">Pending</p>
+            </div>
+        @elseif($splitTest->status === 'running')
+            <div class="flex items-center space-x-1 ">
+                <div class="w-2 h-2 bg-green-600 rounded-full"></div>
+                <p class="text-sm text-green-600 capitalize">Active</p>
             </div>
         @else
             <div class="flex items-center space-x-1 ">
@@ -42,11 +47,12 @@
         @endif
     </td>
     <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-        {{$splitTest->deadline}}
+        {{ $splitTest->deadline }}
     </td>
     <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-        <button class="h-10 px-4 text-xs text-white bg-blue-600 rounded">Set
-            winner</button>
+        <a href="{{ route('splittest.show', ['splitTest' => $splitTest->uuid]) }}"
+            class="h-10 px-4 text-xs text-white bg-blue-600 rounded">Set
+            winner</a>
     </td>
     <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
         <svg width="5" height="20" viewBox="0 0 5 20" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -9,6 +9,7 @@ class Table extends Component
     public function render()
     {
         $splitTests = auth()->user()->splitTests()->withCount('splitCycles')->withSum('orders', 'quantity')->paginate();
+
         return view('livewire.dashboard.table', [
             'splitTests' => $splitTests
         ]);

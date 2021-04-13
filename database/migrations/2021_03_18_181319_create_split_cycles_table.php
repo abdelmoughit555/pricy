@@ -19,10 +19,8 @@ class CreateSplitCyclesTable extends Migration
             $table->string('name');
             $table->date('start_at');
             $table->date('end_at');
-            $table->string('variant_id');
-            $table->string('old_price');
-            $table->string('new_price');
             $table->string('status');
+            $table->boolean('is_winner')->default(false);
             $table->unsignedBigInteger('split_test_id');
             $table->foreign('split_test_id')->references('id')->on('split_tests')->onDelete('cascade');
             $table->timestamps();

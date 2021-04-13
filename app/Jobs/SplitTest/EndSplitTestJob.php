@@ -33,15 +33,23 @@ class EndSplitTestJob implements ShouldQueue
     public function handle()
     {
         $showOwner = $this->splitCycle->splitTest->shopOwner;
+        $product = $this->splitCycle->splitTest->product;
+        $variants = $this->splitCycle->variants;
+
+        $variantQuery = [];
+        foreach ($variants as $variant) {
+            array_push($variantQuery, [
+                'id' => $variant->variant_id,
+                'price' => $variant->old_price
+            ]);
+        }
 
         $showOwner->api()->rest(
             'PUT',
-            "/admin/api/variants/{$this->splitCycle->variant_id}.json",
-            ['query' => [
-                'variant' => [
-                    'id' => $this->splitCycle->variant_id,
-                    'price' => $this->splitCycle->old_price
-                ]
+            "/admin/api/products/{$product->shopify_product_id}.json",
+            ['product' => [
+                'id' => $product->shopify_product_id,
+                'variants' => $variantQuery
             ]]
         );
 

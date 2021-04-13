@@ -7,19 +7,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Orders extends Model
+class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['quantity', 'order_shopify_id', 'line_item_id', 'price', 'total_price', 'split_cycle_id', 'split_cycle_id'];
+    protected $fillable = ['quantity', 'order_shopify_id', 'line_item_id', 'price', 'total_price', 'variant_id', 'shop_id'];
 
     protected $cast = [
         'created_at' => 'date'
     ];
 
-    public function splitCycle()
+    public function Variant()
     {
-        return $this->belongsTo(SplitCycle::class);
+        return $this->belongsTo(Variant::class);
+    }
+
+    public function shopOwner()
+    {
+        return $this->belongsTo(User::class, 'shop_id');
     }
 
     public function scopeCreatedLast(Builder $builder, int $day)

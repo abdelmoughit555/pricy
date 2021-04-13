@@ -51,7 +51,7 @@ class ProductsUpdateJob implements ShouldQueue
      */
     public function handle()
     {
-        // Convert domain
+        /*         // Convert domain
         $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
         $name = $this->shopDomain->toNative();
 
@@ -66,6 +66,6 @@ class ProductsUpdateJob implements ShouldQueue
             'image' => $data->image->src,
         ]);
 
-        $product->deleteRelatedRelationship();
+        $product->deleteRelatedRelationship(); */
     }
 }

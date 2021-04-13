@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Experiments\SplitTest;
 
 use App\Models\SplitCycle;
+use App\Models\SplitTest;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -132,7 +133,8 @@ class SecondStep extends Component
             array_push($variants, [
                 'old_price' => $variant['price'],
                 'new_price' => $variant['price'],
-                'variant_id' => $variant['id']
+                'variant_id' => $variant['id'],
+                'variant_name' => $variant['title']
             ]);
         }
 
@@ -155,16 +157,22 @@ class SecondStep extends Component
             ->first();
 
         $splitTest = $product->splitTests()->create([
+            'status' => SplitTest::PENDING,
             'shop_id' => $product->shop_id,
             'title' => $product->title,
             'deadline' => $this->tests[array_key_last($this->tests)]['end_at']
         ]);
 
         foreach ($this->tests as $test) {
+            $splitCycle = $splitTest->splitCycles()->create([
+                'name' => $test['name'],
+                'start_at' => Carbon::parse($test['start_at'])->format('Y-m-d'),
+                'end_at' => Carbon::parse($test['end_at'])->format('Y-m-d'),
+                'status' => SplitCycle::PENDING
+            ]);
             foreach ($test['variants'] as $variant) {
-                $splitTest->splitCycles()->create([
-                    'start_at' => Carbon::parse($test['start_at'])->format('Y-m-d'),
-                    'end_at' => Carbon::parse($test['end_at'])->format('Y-m-d'),
+                $splitCycle->variants()->create([
+                    'variant_name' => $variant['variant_name'],
                     'variant_id' => $variant['variant_id'],
                     'new_price' => $variant['new_price'],
                     'old_price' => $variant['old_price'],

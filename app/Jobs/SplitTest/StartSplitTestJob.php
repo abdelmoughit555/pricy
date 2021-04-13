@@ -2,6 +2,7 @@
 
 namespace App\Jobs\SplitTest;
 
+use App\Events\SplitTestEndedEvent;
 use App\Models\SplitCycle;
 use App\Models\SplitTest;
 use App\Models\User;
@@ -35,19 +36,30 @@ class StartSplitTestJob implements ShouldQueue
     public function handle()
     {
         $showOwner = $this->splitCycle->splitTest->shopOwner;
+        $product = $this->splitCycle->splitTest->product;
+        $variants = $this->splitCycle->variants;
+
+        $variantQuery = [];
+        foreach ($variants as $variant) {
+            array_push($variantQuery, [
+                'id' => $variant->variant_id,
+                'price' => $variant->new_price
+            ]);
+        }
+
         $showOwner->api()->rest(
             'PUT',
-            "/admin/api/variants/{$this->splitCycle->variant_id}.json",
-            ['query' => [
-                'variant' => [
-                    'id' => $this->splitCycle->variant_id,
-                    'price' => $this->splitCycle->new_price
-                ]
+            "/admin/api/products/{$product->shopify_product_id}.json",
+            ['product' => [
+                'id' => $product->shopify_product_id,
+                'variants' => $variantQuery
             ]]
         );
 
         $this->splitCycle->update([
             'status' => SplitCycle::RUNNING
         ]);
+
+        event(new SplitTestEndedEvent($this->splitCycle->splitTest));
     }
 }

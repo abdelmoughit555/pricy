@@ -78,8 +78,12 @@ class User extends Authenticatable implements IShopModel
 
     public function orders()
     {
-        return $this->hasManyDeepFromRelations($this->splitCycles(), (new SplitCycle)->orders());
+        return $this->hasMany(Order::class, 'shop_id');
     }
+    /*     public function orders()
+    {
+        return $this->hasManyDeepFromRelations($this->splitCycles(), (new SplitCycle)->orders());
+    } */
 
     public function fistConnectionAndImportatedAt()
     {

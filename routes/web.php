@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\SplitTestController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,8 @@ Route::middleware(['auth.shopify'])->group(function () {
             return view('experiments.split-test.create');
         })->name('create-split-test');
     });
+
+    Route::get('/split-test/{splitTest}', [SplitTestController::class, 'show'])->name('splittest.show');
 
     /*     Route::get('/test', [TestController::class, 'index'])->name('test');
  */

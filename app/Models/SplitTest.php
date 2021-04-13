@@ -8,20 +8,34 @@ use Illuminate\Support\Str;
 
 class SplitTest extends Model
 {
-    use HasFactory;
+    const PENDING = "pending";
+    const RUNNING = "running";
+    const FINISHED = "finshed";
+
+    use HasFactory, \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     protected $fillable = [
         'uuid',
         'title',
         'product_id',
         'shop_id',
-        'is_active',
+        'status',
         'deadline'
     ];
 
     protected $cast = [
         'deadline' => 'date'
     ];
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     public static function boot()
     {
@@ -47,8 +61,9 @@ class SplitTest extends Model
         return $this->hasMany(SplitCycle::class);
     }
 
+
     public function orders()
     {
-        return $this->hasManyThrough(Orders::class, SplitCycle::class);
+        return $this->hasManyDeepFromRelations($this->splitCycles(), (new SplitCycle)->orders());
     }
 }

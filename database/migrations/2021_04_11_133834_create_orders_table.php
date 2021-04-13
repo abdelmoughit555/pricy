@@ -20,8 +20,11 @@ class CreateOrdersTable extends Migration
             $table->string('line_item_id');
             $table->string('price');
             $table->string('total_price');
-            $table->unsignedBigInteger('split_cycle_id');
-            $table->foreign('split_cycle_id')->references('id')->on('split_cycles')->onDelete('cascade');
+            $table->unsignedBigInteger('variant_id');
+            $table->foreign('variant_id')->references('id')->on('variants')->onDelete('cascade');
+            $table->unsignedBigInteger('shop_id');
+            $table->foreign('shop_id')->references('id')->on('users')->onDelete('cascade');;
+
             $table->timestamps();
         });
     }

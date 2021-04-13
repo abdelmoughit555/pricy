@@ -307,15 +307,15 @@ return [
     'webhooks' => [
         [
             'topic' => 'products/update',
-            'address' => 'https://15b3f36444fc.ngrok.io/webhook/products-update'
+            'address' => 'https://digitalwaveapp.com/webhook/products-update'
         ],
         [
             'topic' => 'products/delete',
-            'address' => 'https://15b3f36444fc.ngrok.io/webhook/products-delete'
+            'address' => 'https://digitalwaveapp.com/webhook/products-delete'
         ],
         [
             'topic' => 'orders/create',
-            'address' => 'https://15b3f36444fc.ngrok.io/webhook/orders-create'
+            'address' => 'https://digitalwaveapp.com/webhook/orders-create'
         ]
     ],
 

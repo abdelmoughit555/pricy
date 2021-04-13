@@ -8,7 +8,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return "herer";
         $user = auth()->user();
 
         $splitTests = '' /* $user->splitTests()->withCount('splitCycles')->withSum('orders', 'quantity')->paginate() */;

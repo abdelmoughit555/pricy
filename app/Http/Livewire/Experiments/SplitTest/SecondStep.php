@@ -19,22 +19,6 @@ class SecondStep extends Component
 
     protected $listeners = ['fetchProductId', 'finshSplitTest'];
 
-    /*    public function mount()
-    {
-        $this->product = auth()->user()->getProduct(6553892389071);
-
-        $this->variants = $this->product["variants"];
-
-        array_push($this->tests, [
-            'name' => 'Split Test ' . count($this->tests) + 1,
-            'start_at' => Carbon::today()->format('Y-m-d'),
-            'end_at' => Carbon::tomorrow()->format('Y-m-d'),
-            'variants' => $this->variantsProduct(),
-            'has_error' => false
-        ]);
-
-        $this->isLoading = false;
-    } */
     public function fetchProductId($productId)
     {
         $this->product = auth()->user()->getProduct($productId);
@@ -43,8 +27,8 @@ class SecondStep extends Component
 
         array_push($this->tests, [
             'name' => 'Split Test ',
-            'start_at' => Carbon::today()->format('Y-m-d'),
-            'end_at' => Carbon::tomorrow()->format('Y-m-d'),
+            'start_at' => Carbon::tomorrow()->format('Y-m-d'),
+            'end_at' => Carbon::tomorrow()->addDay(1)->format('Y-m-d'),
             'variants' => $this->variantsProduct(),
             'has_error' => false
         ]);
@@ -83,7 +67,7 @@ class SecondStep extends Component
     {
         $this->validate([
             'tests.*.name' => 'required',
-            'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::today()->format('Y-m-d'),
+            'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::tomorrow()->format('Y-m-d'),
             'tests.*.end_at' => 'required|date|date_format:Y-m-d|after:tests.*.start_at',
             'tests.*.variants.*.old_price' => 'required',
             'tests.*.variants.*.new_price' => 'required|gt:0',
@@ -176,7 +160,6 @@ class SecondStep extends Component
                     'variant_id' => $variant['variant_id'],
                     'new_price' => $variant['new_price'],
                     'old_price' => $variant['old_price'],
-                    'status' => SplitCycle::PENDING
                 ]);
             }
         }

@@ -307,15 +307,15 @@ return [
     'webhooks' => [
         [
             'topic' => 'products/update',
-            'address' => 'https://digitalwaveapp.com/webhook/products-update'
+            'address' => env('APP_URL', null) . '/webhook/products-update'
         ],
         [
             'topic' => 'products/delete',
-            'address' => 'https://digitalwaveapp.com/webhook/products-delete'
+            'address' => env('APP_URL', null) . '/webhook/products-delete'
         ],
         [
             'topic' => 'orders/create',
-            'address' => 'https://digitalwaveapp.com/webhook/orders-create'
+            'address' => env('APP_URL', null) . '/webhook/orders-create'
         ]
     ],
 

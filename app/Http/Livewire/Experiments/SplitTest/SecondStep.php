@@ -67,7 +67,7 @@ class SecondStep extends Component
     {
         $this->validate([
             'tests.*.name' => 'required',
-            'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::tomorrow()->format('Y-m-d'),
+            'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::today()->format('Y-m-d'),
             'tests.*.end_at' => 'required|date|date_format:Y-m-d|after:tests.*.start_at',
             'tests.*.variants.*.old_price' => 'required',
             'tests.*.variants.*.new_price' => 'required|gt:0',

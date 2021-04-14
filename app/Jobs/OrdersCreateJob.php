@@ -59,7 +59,7 @@ class OrdersCreateJob implements ShouldQueue
 
         collect($this->data->line_items)->each(function ($lineItem) use ($user) {
             $variant = Variant::whereHas('splitCycle', function ($query) {
-                $query->where('status', SplitCycle::FINISHED);
+                $query->where('status', SplitCycle::RUNNING);
             })->where('variant_id', $lineItem->variant_id)
                 ->first();
 

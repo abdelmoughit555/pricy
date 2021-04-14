@@ -316,6 +316,10 @@ return [
         [
             'topic' => 'orders/create',
             'address' => env('APP_URL', null) . '/webhook/orders-create'
+        ],
+        [
+            'topic' => 'products/create',
+            'address' => env('APP_URL', null) . '/webhook/products-create'
         ]
     ],
 

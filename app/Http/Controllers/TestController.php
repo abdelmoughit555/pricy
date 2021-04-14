@@ -15,29 +15,10 @@ class TestController extends Controller
     {
         $shop = User::first();
 
-        $showOwner = $shop;
-        $splitCycle = SplitCycle::find(24);
-        $product = $splitCycle->splitTest->product;
-        $variants = $splitCycle->variants;
 
-        /*         dd(['variant' => [
-            'id' => $variants[0]->variant_id,
-            'price' => $variants[0]->new_price,
-        ]]); */
-        $variantQuery = [];
-        foreach ($variants as $variant) {
-            array_push($variantQuery, [
-                'id' => $variant->variant_id,
-                'price' => $variant->new_price
-            ]);
-        }
-        $response = $showOwner->api()->rest(
+        $response = $shop->api()->rest(
             'GET',
-            "/admin/api/products/{$product->shopify_product_id}.json",
-            ['product' => [
-                'id' => $product->shopify_product_id,
-                'variants' => $variantQuery
-            ]]
+            "/admin/api/products/6553893372111.json"
         );
 
         return $response;

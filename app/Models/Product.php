@@ -37,6 +37,11 @@ class Product extends Model
         return $this->hasMany(SplitTest::class);
     }
 
+    public function hasActiveSplitTest()
+    {
+        return $this->splitTests()->whereIn('status', [SplitTest::PENDING, SplitTest::RUNNING])->exists();
+    }
+
     public function deleteRelatedRelationship()
     {
         $this->splitTests->each(function ($splitTest) {

@@ -45,11 +45,11 @@ class OrderCreateJob implements ShouldQueue
                         "quantity" => 2
                     ],
                     [
-                        "variant_id" => 39316475707599,
+                        "variant_id" => 39316475674831,
                         "quantity" => 6
                     ],
                     [
-                        "variant_id" => 39316475740367,
+                        "variant_id" => 39316475707599,
                         "quantity" => 6
                     ],
                 ]

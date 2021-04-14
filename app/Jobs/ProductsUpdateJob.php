@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
+use App\Models\SplitTest;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -51,21 +52,51 @@ class ProductsUpdateJob implements ShouldQueue
      */
     public function handle()
     {
-        /*         // Convert domain
+        // Convert domain
         $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
         $name = $this->shopDomain->toNative();
 
         $user = User::where('name', $name)->first();
         $data = $this->data;
 
-        $product = Product::updateOrCreate([
-            'shop_id' => $user->id,
-            'shopify_product_id' => $data->id
-        ], [
-            'title' => $data->title,
-            'image' => $data->image->src,
-        ]);
+        $product = $user->products()->where('shopify_product_id', $data->id)->first();
 
-        $product->deleteRelatedRelationship(); */
+        if (!$product->hasActiveSplitTest()) {
+            $product->update([
+                'title' => $data->title,
+                'image' => $data->image->src,
+                'shopify_product_id' => $data->id
+            ]);
+            return;
+        }
+
+        $splitTest = $product->splitTests->whereIn('status', [SplitTest::RUNNING, SplitTest::PENDING])->first();
+
+        if ($this->data->title != $product->title) {
+            $product->deleteRelatedRelationship();
+        }
+        foreach ($this->data->variants as $variant) {
+            $currentVariant = $splitTest->variants->where('variant_id', $variant->id)->first();
+            //deleted variants
+            if (!$currentVariant) {
+                $product->deleteRelatedRelationship();
+                break;
+            }
+
+            if ($currentVariant->variant_name != $variant->title) {
+                $product->deleteRelatedRelationship();
+                break;
+            }
+            //changed new price
+            if ($splitTest->status == SplitTest::RUNNING && $currentVariant->new_price != $variant->price) {
+                $product->deleteRelatedRelationship();
+                break;
+            }
+            //changed old price
+            if ($splitTest->status == SplitTest::PENDING && $currentVariant->old_price != $variant->price) {
+                $product->deleteRelatedRelationship();
+                break;
+            }
+        }
     }
 }

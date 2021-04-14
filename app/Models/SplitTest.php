@@ -51,6 +51,11 @@ class SplitTest extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function variants()
+    {
+        return $this->hasManyThrough(Variant::class, SplitCycle::class);
+    }
+
     public function shopOwner()
     {
         return $this->belongsTo(User::class, 'shop_id');

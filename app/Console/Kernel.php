@@ -27,8 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        /*         $schedule->command('faker:order')->everyMinute();
- */        //run split test of today
+        $schedule->command('faker:order')->everyMinute();
+        //run split test of today
         $schedule->command('splittest:start')->daily();
         //end split test of today
         $schedule->command('splittest:end')->daily();

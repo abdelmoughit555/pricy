@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Experiments\SplitTest;
 
+use App\Models\SplitTest;
 use Livewire\Component;
 
 class FirstStep extends Component
@@ -18,7 +19,9 @@ class FirstStep extends Component
     {
         $searchTearm = '%' . $this->searchTearm . '%';
 
-        $products = auth()->user()->products()->latest()->where('title', 'like', $searchTearm)->paginate($this->perPage);
+        $products = auth()->user()->products()->latest()->whereDoesntHave('splitTests', function ($query) {
+            $query->whereIn('status', [SplitTest::PENDING, SplitTest::RUNNING]);
+        })->where('title', 'like', $searchTearm)->paginate($this->perPage);
 
         return view('livewire.experiments.split-test.first-step', [
             'products' => $products,

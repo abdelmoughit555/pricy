@@ -61,6 +61,8 @@ class ProductsUpdateJob implements ShouldQueue
 
         $product = $user->products()->where('shopify_product_id', $data->id)->first();
 
+        if (!$product) return;
+
         if (!$product->hasActiveSplitTest()) {
             $product->update([
                 'title' => $data->title,

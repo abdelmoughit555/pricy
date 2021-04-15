@@ -20,7 +20,7 @@ class Steps extends Component
 
     public function emitFinishSplit()
     {
-        $this->emitTo('SecondStep', 'emitedFinishSplitTest');
+        $this->emit('emitedFinishSplitTest');
     }
 
     public function previousStep()

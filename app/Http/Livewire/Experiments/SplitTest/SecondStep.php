@@ -131,7 +131,7 @@ class SecondStep extends Component
     public function deleteRow($row)
     {
         if (count($this->tests) == 1) return;
-        unset($this->tests[$row]);
+        array_splice($this->tests, $row, 1);
     }
 
     public function finshSplitTest()

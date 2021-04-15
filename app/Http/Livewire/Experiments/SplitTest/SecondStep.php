@@ -17,7 +17,7 @@ class SecondStep extends Component
     public $isLoading = true;
     public $currentStartAt = "";
 
-    protected $listeners = ['fetchProductId', 'finshSplitTest'];
+    protected $listeners = ['fetchProductId', 'emitedFinishSplitTest' => 'finshSplitTest'];
 
     public function fetchProductId($productId)
     {

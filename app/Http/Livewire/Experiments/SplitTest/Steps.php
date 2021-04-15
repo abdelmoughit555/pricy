@@ -9,7 +9,7 @@ class Steps extends Component
     public $currentStep = 1;
     public $totalSteps = 2;
 
-    protected $listeners = ['incrementStep' => 'nextStep', 'finshSplitTest'];
+    protected $listeners = ['incrementStep' => 'nextStep', 'finshSplitTest' => 'emitFinishSplit'];
 
     public function nextStep($productId)
     {
@@ -18,9 +18,9 @@ class Steps extends Component
         $this->currentStep++;
     }
 
-    public function finshSplitTest()
+    public function emitFinishSplit()
     {
-        $this->emit('finshSplitTest');
+        $this->emitTo('SecondStep', 'emitedFinishSplitTest');
     }
 
     public function previousStep()

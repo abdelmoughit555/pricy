@@ -50,6 +50,7 @@ class SecondStep extends Component
 
     public function addNewTest()
     {
+        $this->validateData();
         $this->errorMessage = "";
         if (!$this->checkDateValidation()) return;
         array_push($this->tests, [
@@ -63,7 +64,7 @@ class SecondStep extends Component
         $this->totalTest = count($this->tests);
     }
 
-    protected function checkdateValidation()
+    protected function validateData()
     {
         $this->validate([
             'tests.*.name' => 'required',
@@ -73,7 +74,9 @@ class SecondStep extends Component
             'tests.*.variants.*.new_price' => 'required|gt:0',
             'tests.*.variants.*.variant_id' => 'required',
         ]);
-
+    }
+    protected function checkdateValidation()
+    {
         $status = true;
         foreach ($this->tests as $key => $test) {
             $startAt = Carbon::parse($test['start_at']);
@@ -133,6 +136,7 @@ class SecondStep extends Component
 
     public function finshSplitTest()
     {
+        $this->validateData();
         $this->errorMessage = "";
         if (!$this->checkDateValidation()) return;
 

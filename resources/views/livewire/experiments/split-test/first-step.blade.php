@@ -1,4 +1,4 @@
-<div class="flex justify-center">
+<div class="flex justify-center" x-data="{ open: false  }">
     <div class="w-2/3 h-full ">
         <div>
             <p class="font-semibold text-pricy-base text-pricy-gray-400">Step 1/3 :</p>
@@ -6,7 +6,7 @@
         <div class="flex flex-col px-12 pt-12 pb-4 mt-8 rounded-lg bg-pricy-gray-100" style="height: 500px">
             <h2 class="font-semibold text-gray-800 text-pricy-base">Whish producy would you like to test?</h2>
             <div class="relative mt-8">
-                <input wire:model="searchTearm" type="text"
+                <input wire:model="searchTearm" type="text" @click="open = !open"
                     class="w-full px-8 py-3 text-sm placeholder-gray-500 rounded-lg outline-none text-pricy-gray-400"
                     placeholder="Search Product ({{ $products->total() }})">
                 <div class="absolute left-2 top-3">
@@ -21,22 +21,24 @@
 
                 </div>
             </div>
-            <div class="flex-1 mt-4 overflow-scroll bg-white rounded">
-                @foreach ($products as $product)
-                    <div wire:click="$emitUp('incrementStep', {{ $product->shopify_product_id }})"
-                        class="transition-colors duration-200 cursor-pointer hover:bg-gray-50">
-                        <div class="flex items-center w-full px-6 py-2 space-x-2 ">
-                            <div class="w-12 h-16">
-                                <img src="{{ $product->image }}" class="w-full h-full" alt="{{ $product->title }}">
+            <template x-if="open">
+                <div class="flex-1 mt-4 overflow-scroll bg-white rounded" @click.away="open = false">
+                    @foreach ($products as $product)
+                        <div wire:click="$emitUp('incrementStep', {{ $product->shopify_product_id }})"
+                            class="transition-colors duration-200 cursor-pointer hover:bg-gray-50">
+                            <div class="flex items-center w-full px-6 py-2 space-x-2 ">
+                                <div class="w-12 h-16">
+                                    <img src="{{ $product->image }}" class="w-full h-full"
+                                        alt="{{ $product->title }}">
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium">{{ $product->title }} </p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium">{{ $product->title }} </p>
-                            </div>
+                            <hr>
                         </div>
-                        <hr>
-                    </div>
-                @endforeach
-                <div x-data="{
+                    @endforeach
+                    <div x-data="{
                             observe() {
                                 let observer = new IntersectionObserver((entries) => {
                                     entries.forEach(entry => {
@@ -52,8 +54,10 @@
                             }
                         }" x-init="observe">
 
+                    </div>
                 </div>
-            </div>
+            </template>
+
         </div>
     </div>
 

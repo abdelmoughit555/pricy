@@ -7,7 +7,7 @@
                 expirement
                 today?</p>
         </div>
-        <div class="grid grid-cols-1 mt-24 lg:grid-cols-3 lg:gap-x-12 xl:gap-x-16">
+        <div class="flex justify-center mt-24 w-96">
             @foreach ($expirements as $expirement)
                 <x-expirements.type :expirement="$expirement" />
             @endforeach

@@ -2,7 +2,8 @@
     x-data="{ show : false }" @mouseenter="show = true" @mouseleave="show = false">
     <div>
         <div class="w-full h-56 lg:px:6 xl:px-12">
-            <img src="{{ asset('images/experiments/' . $expirement['image']) }}" class="h-full" />
+            <img src="{{ asset('images/experiments/' . $expirement['image']) }}"
+                class="flex justify-center w-full h-full" />
         </div>
         <div class="mt-4">
             <p class="font-semibold text-pricy-medium">{{ $expirement['name'] }}</p>

@@ -13,7 +13,7 @@ class CreateExpirement extends Component
             'route_name' => 'create-split-test',
             'image' => 'split-test.png'
         ],
-        'rules' => [
+        /*         'rules' => [
             'name' => 'rules',
             'description' => 'Rules help guide actions toward desired results',
             'route_name' => 'create-split-test',
@@ -24,7 +24,7 @@ class CreateExpirement extends Component
             'description' => 'With our Artificial intelligence you can create, optimize, and manage your prices.',
             'route_name' => 'create-split-test',
             'image' => 'ai.png'
-        ]
+        ] */
 
     ];
 

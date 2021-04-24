@@ -27,8 +27,7 @@ class SplitTestIsFinishedCheckListeners
 
         if ($status->contains(SplitCycle::RUNNING)) {
             $splitTestStatus = SplitTest::RUNNING;
-        }
-        if (
+        } else if (
             $status->contains(SplitCycle::FINISHED) && !($status->contains(SplitCycle::RUNNING) || $status->contains(SplitCycle::PENDING))
         ) {
             $splitTestStatus = SplitTest::FINISHED;

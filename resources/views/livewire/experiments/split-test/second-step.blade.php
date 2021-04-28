@@ -62,7 +62,7 @@
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-4 text-xs font-medium tracking-wider text-left text-pricy-400">
-                                            <p class="text-sm font-medium text-pricy-gray-400 ">Variants</p>
+                                            <p class="text-sm font-medium text-pricy-gray-400 ">Split Name</p>
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-4 text-xs font-medium tracking-wider text-left text-pricy-400">

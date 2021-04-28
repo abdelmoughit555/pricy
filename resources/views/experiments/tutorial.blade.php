@@ -27,7 +27,7 @@
                 <div class="absolute top-0 w-full h-full" x-show="currentStep == index + 1">
                     <div class="h-full">
                         <div class="flex h-full">
-                            <div class="flex flex-col justify-center w-1/2 h-full px-44">
+                            <div class="flex flex-col justify-center w-1/2 h-full lg:px-16 xl:px-28">
                                 <div class="w-2/3 h-80">
                                     <div class="flex items-center">
                                         <div class="mr-2">
@@ -45,12 +45,26 @@
                                         </p>
                                     </div>
                                     <div class="mt-4">
-                                        <h1 class="font-semibold text-pricy-lg text-pricy-gray-400"
+                                        <h1 x-show="currentStep == index + 1"
+                                            x-transition:enter="transition ease-in-out duration-300"
+                                            x-transition:enter-start="opacity-0 transform scale-x-0 -translate-x-1/2"
+                                            x-transition:enter-end="opacity-100 transform scale-x-100 translate-x-0"
+                                            x-transition:leave="transition ease-in-out duration-300"
+                                            x-transition:leave-start="opacity-100 transform scale-x-100 translate-x-0"
+                                            x-transition:leave-end="opacity-0 transform scale-x-0 -translate-x-1/2"
+                                            class="font-semibold text-pricy-lg text-pricy-gray-400"
                                             x-text="swiper.title">
                                         </h1>
                                     </div>
                                     <div>
-                                        <p class="leading-loose text-pricy-sm text-pricy-gray-200"
+                                        <p x-show="currentStep == index + 1"
+                                            x-transition:enter="transition ease-in-out duration-300"
+                                            x-transition:enter-start="opacity-0 transform scale-x-0 -translate-x-1/2"
+                                            x-transition:enter-end="opacity-100 transform scale-x-100 translate-x-0"
+                                            x-transition:leave="transition ease-in-out duration-300"
+                                            x-transition:leave-start="opacity-100 transform scale-x-100 translate-x-0"
+                                            x-transition:leave-end="opacity-0 transform scale-x-0 -translate-x-1/2"
+                                            class="leading-loose text-pricy-sm text-pricy-gray-200"
                                             x-text="swiper.description">
                                         </p>
                                     </div>
@@ -78,16 +92,23 @@
                                     </template>
                                 </div>
                             </div>
-                            <div class="flex flex-col justify-center w-1/2 h-full px-44 bg-pricy-yellow">
+                            <div class="flex flex-col justify-center w-1/2 h-full lg:px-16 xl:px-28 bg-pricy-yellow">
                                 <div class="flex justify-center w-full h-80">
-                                    <img :src="updateImage(swiper.image)" class="h-full" />
+                                    <img x-show="currentStep == index + 1"
+                                        x-transition:enter="transition ease-in-out duration-300"
+                                        x-transition:enter-start="opacity-0 transform scale-x-0 -translate-x-1/2"
+                                        x-transition:enter-end="opacity-100 transform scale-x-100 translate-x-0"
+                                        x-transition:leave="transition ease-in-out duration-300"
+                                        x-transition:leave-start="opacity-100 transform scale-x-100 translate-x-0"
+                                        x-transition:leave-end="opacity-0 transform scale-x-0 -translate-x-1/2"
+                                        :src="updateImage(swiper.image)" class="h-full" />
                                 </div>
                                 <div class="flex items-center justify-between w-full mt-32">
                                     <div>
                                         <template x-if="currentStep != 1">
                                             <div class="flex items-center space-x-1 cursor-pointer"
                                                 @click="currentStep--">
-                                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                                <svg width="13" height="11" viewBox="0 0 13 11" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M1.1875 5.79419L12.4375 5.79419" stroke="#1B2124"
                                                         stroke-width="1.125" stroke-linecap="round"

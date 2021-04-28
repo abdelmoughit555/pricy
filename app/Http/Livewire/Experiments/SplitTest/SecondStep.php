@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Experiments\SplitTest;
 use App\Models\SplitCycle;
 use App\Models\SplitTest;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 
 class SecondStep extends Component
@@ -12,13 +13,16 @@ class SecondStep extends Component
     public $product = [];
     public $variants = [];
     public $tests = [];
-    public $errorMessage = '';
-    public $currentLoop  = 1;
     public $isLoading = true;
     public $currentStartAt = "";
 
     protected $listeners = ['fetchProductId', 'emitedFinishSplitTest' => 'finshSplitTest'];
 
+    protected $messages = [
+        'tests.min' => 'The Split test should have more than one split cycle.',
+        'tests.*.variants.*.new_price.required' => 'Enter a valid price for the variants',
+        'tests.*.variants.*.new_price.gt' => 'Variant price should be greater than 0'
+    ];
 
     /*     public function mount()
     {
@@ -47,7 +51,6 @@ class SecondStep extends Component
             'start_at' => Carbon::tomorrow()->format('Y-m-d'),
             'end_at' => Carbon::tomorrow()->addDay(1)->format('Y-m-d'),
             'variants' => $this->variantsProduct(),
-            'has_error' => false,
             'rand' => rand()
         ]);
         $this->isLoading = false;
@@ -57,6 +60,11 @@ class SecondStep extends Component
     {
         $this->tests[$key]['start_at'] = Carbon::parse($dates[0])->format('Y-m-d');
         $this->tests[$key]['end_at'] = Carbon::parse($dates[1])->format('Y-m-d');
+    }
+
+    public function clearSessionErrors()
+    {
+        $this->resetErrorBag();
     }
 
     public function incrementPrice($testKey, $productKey)
@@ -75,14 +83,12 @@ class SecondStep extends Component
     public function addNewTest()
     {
         $this->validateData();
-        $this->errorMessage = "";
         if (!$this->checkDateValidation()) return;
         array_push($this->tests, [
             'name' => 'Split Test ',
             'start_at' => $this->currentStartAt->format('Y-m-d'),
             'end_at' => $this->currentStartAt->addDay()->format('Y-m-d'),
             'variants' => $this->variantsProduct(),
-            'has_error' => false,
             'rand' => rand()
         ]);
     }
@@ -93,6 +99,7 @@ class SecondStep extends Component
             $additionalvalidation,
             [
                 'tests.*.name' => 'required',
+                'tests.min' => 'The Split test should have more than one testn please',
                 'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::today()->format('Y-m-d'),
                 'tests.*.end_at' => 'required|date|date_format:Y-m-d|after:tests.*.start_at',
                 'tests.*.variants.*.old_price' => 'required',
@@ -111,11 +118,8 @@ class SecondStep extends Component
             $passCycle = $startAt > $endAt;
             if ($key == 0) {
                 if ($passCycle) {
-                    $this->tests[$key]['has_error'] = true;
-                    $this->errorMessage = 'please fix';
+                    $this->getErrorBag()->add('interfere-dates', 'Split Cycle dates should not interfere with each other');
                     $status = false;
-                } else {
-                    $this->tests[$key]['has_error'] = false;
                 }
             } else {
                 $previousStartAt = Carbon::parse($this->tests[$key - 1]['start_at']);
@@ -126,14 +130,10 @@ class SecondStep extends Component
                 $passEndAt = $endAt > $previousStartAt  && $endAt > $previousEndAt;
 
                 if (!($passStartAt && $passEndAt) || $passCycle) {
-                    $this->tests[$key]['has_error'] = true;
-                    $this->errorMessage = 'please fix';
+                    $this->getErrorBag()->add('interfere-dates', 'Split Cycle dates should not interfere with each other');
                     $status = false;
-                } else {
-                    $this->tests[$key]['has_error'] = false;
                 }
             }
-
             $this->currentStartAt = $endAt;
         }
         return $status;
@@ -163,7 +163,6 @@ class SecondStep extends Component
     public function finshSplitTest()
     {
         $this->validateData(["tests" => ['required', 'array', 'min:2']]);
-        $this->errorMessage = "";
         if (!$this->checkDateValidation()) return;
 
         $product = auth()->user()->products()

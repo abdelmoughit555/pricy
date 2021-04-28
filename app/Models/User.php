@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,13 +10,11 @@ use Illuminate\Support\LazyCollection;
 use Osiset\ShopifyApp\Contracts\ShopModel as IShopModel;
 use Osiset\ShopifyApp\Traits\ShopModel;
 use Illuminate\Support\Str;
-use Laravolt\Avatar\Avatar;
 
 class User extends Authenticatable implements IShopModel
 {
     use HasFactory, Notifiable, ShopModel;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
-
 
     const PER_PAGE = 250;
 
@@ -65,6 +62,7 @@ class User extends Authenticatable implements IShopModel
 
         foreach ($words as $w) {
             $acronym .= $w[0];
+            if (strlen($acronym) == 2) break;
         }
         return $acronym;
     }

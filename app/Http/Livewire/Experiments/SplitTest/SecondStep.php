@@ -22,7 +22,7 @@ class SecondStep extends Component
         'tests.min' => 'The Split test should have more than one split cycle.',
         'tests.*.variants.*.new_price.required' => 'Enter a valid price for the variants',
         'tests.*.variants.*.new_price.gt' => 'Variant price should be greater than 0',
-        'tests.*.variants.*.name.required' => 'Split Name is required'
+        'tests.*.name.required' => 'Split Name is required'
     ];
 
     /*     public function mount()

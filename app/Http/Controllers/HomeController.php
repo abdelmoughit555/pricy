@@ -10,7 +10,8 @@ class HomeController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->splitTests->count() == 0) {
+        if ($user->firstConnection()) {
+            $user->update(['first_connection_at' => Carbon::now()]);
             return redirect('/tutorial');
         }
 

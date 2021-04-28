@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('currency')->nullable();
+            $table->string('shop_owner')->nullable();
             $table->string('country')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('first_connection_at')->nullable();

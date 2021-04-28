@@ -30,7 +30,7 @@ Route::middleware(['auth.shopify'])->group(function () {
 
     Route::get('/tutorial', function () {
         return view('experiments.tutorial');
-    });
+    })->name('tutorial');
 
     Route::prefix('/create-experiment')->group(function () {
         Route::get('/', function () {

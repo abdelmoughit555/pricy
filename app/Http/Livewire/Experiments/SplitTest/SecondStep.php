@@ -19,6 +19,22 @@ class SecondStep extends Component
 
     protected $listeners = ['fetchProductId', 'emitedFinishSplitTest' => 'finshSplitTest'];
 
+
+    public function mount()
+    {
+        $this->product = auth()->user()->getProduct(6553859588303);
+
+        $this->variants = $this->product["variants"];
+
+        array_push($this->tests, [
+            'name' => 'Split Test ',
+            'start_at' => Carbon::tomorrow()->format('Y-m-d'),
+            'end_at' => Carbon::tomorrow()->addDay(1)->format('Y-m-d'),
+            'variants' => $this->variantsProduct(),
+            'rand' => rand()
+        ]);
+        $this->isLoading = false;
+    }
     public function fetchProductId($productId)
     {
         $this->product = auth()->user()->getProduct($productId);
@@ -33,6 +49,12 @@ class SecondStep extends Component
             'has_error' => false
         ]);
         $this->isLoading = false;
+    }
+
+    public function setCycle($dates, $key)
+    {
+        $this->tests[$key]['start_at'] = Carbon::parse($dates[0])->format('Y-m-d');
+        $this->tests[$key]['end_at'] = Carbon::parse($dates[1])->format('Y-m-d');
     }
 
     public function incrementPrice($testKey, $productKey)
@@ -58,22 +80,24 @@ class SecondStep extends Component
             'start_at' => $this->currentStartAt->format('Y-m-d'),
             'end_at' => $this->currentStartAt->addDay()->format('Y-m-d'),
             'variants' => $this->variantsProduct(),
-            'has_error' => false
+            'has_error' => false,
+            'rand' => rand()
         ]);
-
-        $this->totalTest = count($this->tests);
     }
 
-    protected function validateData()
+    protected function validateData($additionalvalidation = [])
     {
-        $this->validate([
-            'tests.*.name' => 'required',
-            'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::today()->format('Y-m-d'),
-            'tests.*.end_at' => 'required|date|date_format:Y-m-d|after:tests.*.start_at',
-            'tests.*.variants.*.old_price' => 'required',
-            'tests.*.variants.*.new_price' => 'required|gt:0',
-            'tests.*.variants.*.variant_id' => 'required',
-        ]);
+        $this->validate(array_merge(
+            $additionalvalidation,
+            [
+                'tests.*.name' => 'required',
+                'tests.*.start_at' => 'required|date|date_format:Y-m-d|after_or_equal:' . Carbon::today()->format('Y-m-d'),
+                'tests.*.end_at' => 'required|date|date_format:Y-m-d|after:tests.*.start_at',
+                'tests.*.variants.*.old_price' => 'required',
+                'tests.*.variants.*.new_price' => 'required|gt:0',
+                'tests.*.variants.*.variant_id' => 'required',
+            ]
+        ));
     }
     protected function checkdateValidation()
     {
@@ -136,7 +160,7 @@ class SecondStep extends Component
 
     public function finshSplitTest()
     {
-        $this->validateData();
+        $this->validateData(["tests" => ['required', 'array', 'min:2']]);
         $this->errorMessage = "";
         if (!$this->checkDateValidation()) return;
 

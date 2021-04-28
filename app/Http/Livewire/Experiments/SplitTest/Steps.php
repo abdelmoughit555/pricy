@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class Steps extends Component
 {
-    public $currentStep = 1;
+    public $currentStep = 2;
     public $totalSteps = 2;
 
     protected $listeners = ['incrementStep' => 'nextStep', 'finshSplitTest' => 'emitFinishSplit'];

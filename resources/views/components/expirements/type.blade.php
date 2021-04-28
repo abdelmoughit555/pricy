@@ -6,10 +6,10 @@
                 class="flex justify-center w-full h-full" />
         </div>
         <div class="mt-4">
-            <p class="font-semibold text-pricy-medium">{{ $expirement['name'] }}</p>
+            <p class="font-semibold capitalize text-pricy-medium">{{ $expirement['name'] }}</p>
         </div>
         <div class="mt-2">
-            <p class="leading-loose text-pricy-gray-300 text-pricy-sm">compare different prices of your
+            <p class="leading-loose text-pricy-gray-300 text-pricy-sm">Compare different prices of your
                 products
                 to
                 determine

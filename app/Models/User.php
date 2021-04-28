@@ -11,6 +11,7 @@ use Illuminate\Support\LazyCollection;
 use Osiset\ShopifyApp\Contracts\ShopModel as IShopModel;
 use Osiset\ShopifyApp\Traits\ShopModel;
 use Illuminate\Support\Str;
+use Laravolt\Avatar\Avatar;
 
 class User extends Authenticatable implements IShopModel
 {
@@ -34,7 +35,8 @@ class User extends Authenticatable implements IShopModel
         'first_connection_at',
         'imported_product_at',
         'currency',
-        'country'
+        'country',
+        'shop_owner'
     ];
 
     /**
@@ -58,7 +60,13 @@ class User extends Authenticatable implements IShopModel
 
     public function avatar()
     {
-        return 'https://www.gravatar.com/avatar/' . md5($this->email) . '?d=mp';
+        $words = explode(" ", $this->shop_owner);
+        $acronym = "";
+
+        foreach ($words as $w) {
+            $acronym .= $w[0];
+        }
+        return $acronym;
     }
 
     public function products()
@@ -85,12 +93,10 @@ class User extends Authenticatable implements IShopModel
         return $this->hasManyDeepFromRelations($this->splitCycles(), (new SplitCycle)->orders());
     } */
 
-    public function fistConnectionAndImportatedAt()
+    public function importatedAt()
     {
-        $now = Carbon::now();
         $this->update([
-            'first_connection_at' => $now,
-            'imported_product_at' => $now
+            'imported_product_at' => Carbon::now()
         ]);
     }
 
@@ -184,6 +190,6 @@ class User extends Authenticatable implements IShopModel
 
             $this->lazilyMakeProducts($products['body']['products']);
         }
-        $this->fistConnectionAndImportatedAt();
+        $this->importatedAt();
     }
 }

@@ -14,15 +14,17 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
 
-    <title>@yield('title')</title>
+    <title>Pricely - @yield('title')</title>
 
     @yield('styles')
     @livewireStyles
 </head>
 
 <body>
-    <x-navbar />
-    <div class="mt-16">
+    @if (Route::currentRouteName() !== 'tutorial')
+        <x-navbar />
+    @endif
+    <div class="mt-12">
         @yield('content')
     </div>
 
@@ -46,6 +48,8 @@
 
     @livewireScripts
     <script src="https://unpkg.com/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 

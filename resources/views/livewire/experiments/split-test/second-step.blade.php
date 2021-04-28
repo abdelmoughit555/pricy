@@ -34,23 +34,18 @@
                                             <p class="text-sm font-medium text-pricy-gray-400 "></p>
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
+                                            class="px-6 py-4 text-xs font-medium tracking-wider text-left text-pricy-400">
                                             <p class="text-sm font-medium text-pricy-gray-400 ">Variants</p>
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
-                                            <p class="text-sm font-medium text-pricy-gray-400 w-52">Split Cycle Start
-                                            </p>
-                                        </th>
-                                        <th scope="col"
-                                            class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
-                                            <p class="text-sm font-medium text-pricy-gray-400 w-52">Split Cycle End
+                                            class="px-6 py-4 text-xs font-medium tracking-wider text-left text-pricy-400">
+                                            <p class="text-sm font-medium text-pricy-gray-400 w-52">Split Test Duration
                                             </p>
                                         </th>
                                         @if ($product)
                                             @foreach ($product['variants'] as $variant)
                                                 <th scope="col"
-                                                    class="px-6 py-4 text-xs font-medium tracking-wider text-left uppercase text-pricy-400">
+                                                    class="px-6 py-4 text-xs font-medium tracking-wider text-left capitalize text-pricy-400">
                                                     <p class="text-sm font-medium text-pricy-gray-300 w-52">
                                                         {{ $variant['title'] }}
                                                     </p>
@@ -61,60 +56,26 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach ($tests as $testKey => $item)
-                                        <tr class="@if ($item['has_error']) bordering @endif">
+                                        <tr>
                                             <td class="px-6 py-4">
-                                                <div wire:click="deleteRow({{ $testKey }})">
-                                                    delete
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <input class="text-sm font-medium text-pricy-gray-200 w-52"
-                                                    wire:model="tests.{{ $testKey }}.name" value="rgergerg">
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="inline-block" x-data
-                                                    x-init="new Pikaday({ field: $refs.startAt, format: 'YYYY-MM-DD' })"
-                                                    class="relative">
-                                                    <div class="relative w-52">
-                                                        <input name=""
-                                                            class="w-full h-10 px-2 text-sm font-medium text-gray-700 border rounded outline-none appearance-none "
-                                                            x-ref="startAt" id=""
-                                                            wire:model.lazy="tests.{{ $testKey }}.start_at">
-                                                        <div class="absolute top-4 right-4">
-                                                            <svg width="8" height="6" viewBox="0 0 8 6" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M3.29048 5.51685C3.63972 6.00078 4.36028 6.00078 4.70952 5.51685L7.32911 1.88706C7.74674 1.30836 7.33324 0.5 6.61958 0.5H1.38042C0.666761 0.5 0.253257 1.30836 0.670893 1.88705L3.29048 5.51685Z"
-                                                                    fill="#484A4F" fill-opacity="0.47" />
-                                                            </svg>
+                                                <div class="w-8">
+                                                    @if (count($tests) > 1)
+                                                        <div class="cursor-pointer"
+                                                            wire:click="deleteRow({{ $testKey }})">
+                                                            <p class="font-medium text-red-600">Delete</p>
                                                         </div>
-                                                    </div>
-
+                                                    @endif
                                                 </div>
-
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="inline-block" x-data
-                                                    x-init="new Pikaday({ field: $refs.startAt, format: 'YYYY-MM-DD' })"
-                                                    class="relative">
-                                                    <div class="relative w-52">
-                                                        <input name=""
-                                                            class="w-full h-10 px-2 text-sm font-medium text-gray-700 border rounded outline-none appearance-none "
-                                                            x-ref="startAt" id=""
-                                                            wire:model.lazy="tests.{{ $testKey }}.end_at">
-
-                                                        <div class="absolute top-4 right-4">
-                                                            <svg width="8" height="6" viewBox="0 0 8 6" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M3.29048 5.51685C3.63972 6.00078 4.36028 6.00078 4.70952 5.51685L7.32911 1.88706C7.74674 1.30836 7.33324 0.5 6.61958 0.5H1.38042C0.666761 0.5 0.253257 1.30836 0.670893 1.88705L3.29048 5.51685Z"
-                                                                    fill="#484A4F" fill-opacity="0.47" />
-                                                            </svg>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
+                                                <input
+                                                    class="relative h-10 px-2 text-sm font-medium text-gray-700 border rounded outline-none appearance-none"
+                                                    wire:model="tests.{{ $testKey }}.name">
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <x-datepicker startAt="{{ $tests[$testKey]['start_at'] }}"
+                                                    endAt="{{ $tests[$testKey]['end_at'] }}"
+                                                    rand="{{ $tests[$testKey]['rand'] }}" key="{{ $testKey }}" />
                                             </td>
                                             @isset($item['variants'])
                                                 @foreach ($item['variants'] as $variantKey => $variant)

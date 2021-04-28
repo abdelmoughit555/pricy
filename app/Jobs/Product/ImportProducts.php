@@ -42,6 +42,7 @@ class ImportProducts implements ShouldQueue
         $shopInfo = $shop->api()->rest('GET', '/admin/shop.json')['body']['shop'];
 
         $shop->update([
+            'shop_owner' => $shopInfo['shop_owner'],
             'currency' => $shopInfo['currency'],
             'country' => $shopInfo['country']
         ]);

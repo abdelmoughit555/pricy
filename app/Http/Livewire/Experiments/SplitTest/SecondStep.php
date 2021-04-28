@@ -47,7 +47,8 @@ class SecondStep extends Component
             'start_at' => Carbon::tomorrow()->format('Y-m-d'),
             'end_at' => Carbon::tomorrow()->addDay(1)->format('Y-m-d'),
             'variants' => $this->variantsProduct(),
-            'has_error' => false
+            'has_error' => false,
+            'rand' => rand()
         ]);
         $this->isLoading = false;
     }

@@ -20,7 +20,7 @@ class SecondStep extends Component
     protected $listeners = ['fetchProductId', 'emitedFinishSplitTest' => 'finshSplitTest'];
 
 
-    public function mount()
+    /*     public function mount()
     {
         $this->product = auth()->user()->getProduct(6553859588303);
 
@@ -34,7 +34,8 @@ class SecondStep extends Component
             'rand' => rand()
         ]);
         $this->isLoading = false;
-    }
+    } */
+
     public function fetchProductId($productId)
     {
         $this->product = auth()->user()->getProduct($productId);
